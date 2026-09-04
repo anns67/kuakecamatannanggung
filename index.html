@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Resmi KUA Kecamatan Nanggung | Kantor Urusan Agama</title>
+  <meta name="description"
+    content="Website Portal Resmi Kantor Urusan Agama (KUA). Pelayanan nikah dan rujuk, bimbingan perkawinan, sertifikasi halal, zakat & wakaf, serta profil Kepala KUA dan Staf Penghulu.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css?v=2">
+</head>
+
+<body>
+
+  <!-- Hidden File Inputs for Local Photo Uploads -->
+  <input type="file" id="upload-hero" accept="image/*" style="display:none;">
+  <input type="file" id="upload-avatar" accept="image/*" style="display:none;">
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Admin Bar (hanya tampil saat login) -->
+  <div id="admin-bar" class="admin-bar" style="display:none;">
+    <div class="container admin-bar-container">
+      <div class="admin-bar-left">
+        <span class="admin-bar-icon"><i class="fa-solid fa-user-shield"></i></span>
+        <span>Mode <strong>Administrator</strong> — Anda dapat mengelola konten website KUA</span>
+      </div>
+      <div class="admin-bar-right">
+        <button id="btn-open-inbox" class="btn btn-outline-white btn-sm"
+          style="margin-right: 1rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,0,0.1); position: relative;">
+          <i class="fa-solid fa-envelope"></i> Kotak Masuk Konsultasi
+          <span id="inbox-badge-count" class="admin-inbox-badge" style="display:none;">0</span>
+        </button>
+        <span id="admin-username-display" class="admin-username"></span>
+        <button id="btn-logout" class="btn-logout">
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="navbar-header" id="navbar">
+    <div class="top-bar">
+      <div class="container top-bar-container">
+        <div class="top-info">
+          <span><i class="fa-solid fa-mosque"></i> Portal Pelayanan Publik Keagamaan KUA Kecamatan Nanggung</span>
+          <span class="divider">|</span>
+          <span><i class="fa-solid fa-phone"></i> Layanan Informasi: 0857-1535-4226</span>
+        </div>
+        <div class="top-hours">
+          <span><i class="fa-solid fa-clock"></i> Sen - Jum: 07.30 - 16.00 WIB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container nav-container">
+      <a href="#home" class="brand-logo">
+        <div class="logo-icon">
+          <i class="fa-solid fa-kaaba"></i>
+        </div>
+        <div class="logo-text">
+          <span class="brand-name">KUA <span class="highlight">KECAMATAN NANGGUNG</span></span>
+          <span class="brand-sub">KEMENTERIAN AGAMA REPUBLIK INDONESIA</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu" id="nav-menu">
+        <a href="#home" class="nav-link active">Beranda</a>
+        <a href="#sejarah" class="nav-link">Sejarah</a>
+        <a href="#layanan" class="nav-link">Layanan KUA</a>
+        <a href="#biaya" class="nav-link">Simulasi Biaya Nikah</a>
+        <a href="#syarat" class="nav-link">Syarat & Alur</a>
+        <a href="#pegawai" class="nav-link">Profil Pegawai & Penghulu</a>
+        <a href="#forum-konsultasi" class="nav-link">Forum Konsultasi</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Tombol admin-only: tampil hanya saat login -->
+        <button id="btn-add-pegawai-nav" class="btn btn-secondary btn-sm display-desktop admin-only"
+          style="display:none;">
+          <i class="fa-solid fa-user-plus"></i> Kelola Staf KUA
+        </button>
+        <button class="hamburger" id="hamburger-menu" aria-label="Buka Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero-section">
+    <div class="hero-pattern-bg"></div>
+
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="badge-pill">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Pelayanan Publik Bebas Pungli & Transparan</span>
+        </div>
+
+        <h1 class="hero-title">
+          Pelayanan Nikah & Keagamaan <span class="highlight-green">Modern, Integritas & Ramah</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Selamat datang di Portal Resmi Kantor Urusan Agama (KUA) Kecamatan Nanggung. Kami memberikan kemudahan
+          pelayanan pencatatan nikah, bimbingan keluarga sakinah, pengurusan wakaf, serta konseling keagamaan secara
+          profesional.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#biaya" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-calculator"></i> Cek Simulator Biaya Nikah
+          </a>
+          <a href="#pegawai" class="btn btn-outline-green btn-lg">
+            <i class="fa-solid fa-users"></i> Profil Kepala & Penghulu
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+            <div>
+              <span class="stat-number" data-target="1420">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Nikah Terdaftar</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-building-columns"></i></div>
+            <div>
+              <span class="stat-number" data-target="0">0</span><span class="stat-currency"> Rp</span>
+              <span class="stat-label">Menikah di KUA (Gratis)</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-heart"></i></div>
+            <div>
+              <span class="stat-number" data-target="890">0</span><span class="stat-plus">+</span>
+              <span class="stat-label">Peserta Bimwin</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+            <div>
+              <span class="stat-number" data-target="98">0</span><span class="stat-plus">%</span>
+              <span class="stat-label">Indeks Kepuasan (IKM)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-card">
+          <button class="btn btn-secondary btn-sm admin-only btn-edit-hero" style="display:none;"
+            onclick="promptEditHeroImg()">
+            <i class="fa-solid fa-camera"></i> Ubah Foto Hero
+          </button>
+          <img src="foto/kantor KUA.jpg" alt="Pelayanan Pernikahan KUA" class="hero-img" id="hero-main-img">
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sejarah Section -->
+  <section id="sejarah" class="section sejarah-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">SEJARAH KUA</div>
+        <h2 class="section-title">Sejarah Berdirinya KUA Kecamatan Nanggung</h2>
+        <p class="section-description">
+          Perjalanan panjang Kantor Urusan Agama Kecamatan Nanggung dari tahun 1967 hingga saat ini, melayani masyarakat
+          dengan penuh dedikasi.
+        </p>
+      </div>
+
+      <div class="sejarah-timeline">
+
+        <!-- Timeline Item 1: 1967 -->
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="timeline-year">1967</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <i class="fa-solid fa-landmark-flag"></i>
+                <h3>Berdirinya KUA Kemantren Nanggung</h3>
+              </div>
+              <p>
+                KUA Kecamatan Nanggung berdiri sejak tahun 1967 dengan status <strong>KUA Kemantren Nanggung Kecamatan
+                  Leuwiliang</strong>. Tempat pelayanan berupa gedung sederhana hasil swadaya masyarakat, berlokasi di
+                areal tanah Masjid Al-Mujahidin Desa Nanggung dan dipimpin oleh seorang Wakil PPN.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2: 1985 -->
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="timeline-year">1985</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <i class="fa-solid fa-building-columns"></i>
+                <h3>Definitif Menjadi KUA Kecamatan</h3>
+              </div>
+              <p>
+                KUA Kemantren Nanggung resmi definitif menjadi <strong>KUA Kecamatan</strong>, meliputi 11 (sebelas)
+                desa: Nanggung, Parakan Muncang, Kalongliud, Hambaro, Curugbitung, Cisarua, Bantarkaret, Malasari,
+                Sukaluyu, Pangkaljaya, dan Batu Tulis. Pelayanan masih menempati gedung lama yang kemudian direnovasi
+                pada tahun 1997.
+              </p>
+              <div class="timeline-badge">
+                <i class="fa-solid fa-map-location-dot"></i> 11 Desa
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 3: 2004 -->
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="timeline-year">2004</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-card">
+              <div class="timeline-card-header">
+                <i class="fa-solid fa-house-chimney"></i>
+                <h3>Pindah ke Lokasi Sementara</h3>
+              </div>
+              <p>
+                Awal tahun 2004, KUA Kecamatan Nanggung pindah dari Masjid Al-Mujahidin ke rumah penduduk dengan cara
+                mengontrak, berlokasi di Kp. Kebon Awi Desa Nanggung hingga tahun 2006.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Item 4: 2006-2007 -->
+        <div class="timeline-item">
+          <div class="timeline-marker">
+            <div class="timeline-year">2006</div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-card highlight">
+              <div class="timeline-card-header">
+                <i class="fa-solid fa-mosque"></i>
+                <h3>Pembangunan Gedung Baru</h3>
+              </div>
+              <p>
+                Melalui upaya maksimal Kepala KUA, staf, dan seluruh komponen KUA bekerja sama dengan Camat Nanggung dan
+                <strong>PT Aneka Tambang (ANTAM)</strong>, dibangun gedung baru KUA Kecamatan Nanggung di areal tanah
+                Pemda Kabupaten Bogor seluas <strong>500 M²</strong>.
+              </p>
+              <p>
+                Pembangunan dilaksanakan secara swadaya masyarakat dengan memanfaatkan bantuan finansial dari PT ANTAM
+                sebesar <strong>Rp 93.581.100,-</strong> dan swadaya masyarakat yang dikoordinir oleh Ketua Paguyuban
+                P3N Kecamatan Nanggung dengan total biaya sebesar <strong>Rp 140.000.000,-</strong>.
+              </p>
+              <div class="timeline-highlight-box">
+                <div class="highlight-item">
+                  <i class="fa-solid fa-calendar-check"></i>
+                  <div>
+                    <span class="highlight-label">Diresmikan</span>
+                    <span class="highlight-value">16 April 2007</span>
+                  </div>
+                </div>
+                <div class="highlight-item">
+                  <i class="fa-solid fa-user-tie"></i>
+                  <div>
+                    <span class="highlight-label">Oleh</span>
+                    <span class="highlight-value">Drs. H. Zaenal Abidin, AR. M.Pd.I</span>
+                  </div>
+                </div>
+                <div class="highlight-item">
+                  <i class="fa-solid fa-building"></i>
+                  <div>
+                    <span class="highlight-label">Jabatan</span>
+                    <span class="highlight-value">Kepala Kantor Departemen Agama Kab. Bogor</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Layanan Utama Section -->
+  <section id="layanan" class="section layanan-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">LAYANAN UTAMA KUA</div>
+        <h2 class="section-title">9 Layanan Resmi Kantor Urusan Agama</h2>
+        <p class="section-description">
+          KUA menyelenggarakan 9 (sembilan) fungsi layanan keagamaan resmi bagi masyarakat sesuai dengan Peraturan
+          Menteri Agama (PMA) yang berlaku.
+        </p>
+      </div>
+
+      <div class="layanan-grid">
+        <!-- 1 -->
+        <div class="layanan-card">
+          <div class="layanan-number">01</div>
+          <div class="layanan-icon"><i class="fa-solid fa-ring"></i></div>
+          <h3>Pencatatan Nikah & Rujuk</h3>
+          <p>Pelayanan, pengawasan, pencatatan pernikahan, dan pelaporan nikah dan rujuk sesuai ketentuan
+            perundang-undangan yang berlaku.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Pemeriksaan & Verifikasi Berkas Nikah</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pengawasan & Pencatatan Akad Nikah</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pelaporan Pernikahan & Rujuk (SIMKAH)</li>
+          </ul>
+          <a href="#syarat" class="card-link">Cek Persyaratan <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 2 -->
+        <div class="layanan-card">
+          <div class="layanan-number">02</div>
+          <div class="layanan-icon"><i class="fa-solid fa-mosque"></i></div>
+          <h3>Bimbingan Kemasjidan</h3>
+          <p>Pelayanan bimbingan masjid dan pembinaan kehidupan beragama masyarakat Islam melalui pengelolaan masjid dan
+            musholla yang tertib dan makmur.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Pendataan Masjid & Musholla</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pengukuran & Sertifikasi Arah Kiblat</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pembinaan Takmir & Pengurus Masjid</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Konsultasi Kemasjidan <i
+              class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 3 -->
+        <div class="layanan-card">
+          <div class="layanan-number">03</div>
+          <div class="layanan-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+          <h3>Konsultasi Syariah</h3>
+          <p>Pelayanan konsultasi dan bimbingan hukum Islam (syariah) kepada masyarakat terkait masalah ibadah,
+            muamalah, dan kehidupan keagamaan sehari-hari.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Konsultasi Hukum Munakahat & Waris</li>
+            <li><i class="fa-solid fa-circle-check"></i> Bimbingan Ibadah & Aqidah</li>
+            <li><i class="fa-solid fa-circle-check"></i> Fatwa & Panduan Praktis Keagamaan</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Tanya Syariah <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 4 -->
+        <div class="layanan-card">
+          <div class="layanan-number">04</div>
+          <div class="layanan-icon"><i class="fa-solid fa-people-roof"></i></div>
+          <h3>Bimbingan Perkawinan & Keluarga Sakinah</h3>
+          <p>Pelayanan bimbingan perkawinan (Bimwin/Suscatin) pra-nikah dan pembinaan keluarga sakinah mawaddah wa
+            rahmah melalui lembaga BP4.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Kursus Calon Pengantin (Suscatin)</li>
+            <li><i class="fa-solid fa-circle-check"></i> Konseling Rumah Tangga & Mediasi BP4</li>
+            <li><i class="fa-solid fa-circle-check"></i> Sertifikat Bimbingan Perkawinan Resmi</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Jadwal Bimwin <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 5 -->
+        <div class="layanan-card">
+          <div class="layanan-number">05</div>
+          <div class="layanan-icon"><i class="fa-solid fa-people-group"></i></div>
+          <h3>Bimbingan Masyarakat Islam</h3>
+          <p>Layanan bimbingan dan pembinaan umat Islam di tingkat kecamatan untuk meningkatkan pemahaman, pengamalan,
+            dan kualitas kehidupan beragama masyarakat.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Penyuluhan Keagamaan kepada Masyarakat</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pemberdayaan Majelis Taklim & Ormas Islam</li>
+            <li><i class="fa-solid fa-circle-check"></i> Bimbingan Keagamaan Kelompok Rentan</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Info Bimbingan <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 6 -->
+        <div class="layanan-card">
+          <div class="layanan-number">06</div>
+          <div class="layanan-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+          <h3>Penerangan & Bimbingan Agama Islam</h3>
+          <p>Pelayanan bimbingan, penyuluhan, dan penerangan agama Islam kepada masyarakat luas melalui kegiatan dakwah,
+            ceramah, dan media informasi keagamaan.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Penyuluhan Agama di Masyarakat & Instansi</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pembinaan Dai & Penceramah Agama</li>
+            <li><i class="fa-solid fa-circle-check"></i> Produksi & Distribusi Media Dakwah</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Info Penyuluhan <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 7 -->
+        <div class="layanan-card">
+          <div class="layanan-number">07</div>
+          <div class="layanan-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+          <h3>Bimbingan Zakat & Wakaf</h3>
+          <p>Pelayanan bimbingan zakat, infaq, shadaqah, dan pengelolaan wakaf termasuk penerbitan Akta Ikrar Wakaf
+            (AIW) serta pemberdayaan aset wakaf produktif.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Penerbitan Akta Ikrar Wakaf (AIW)</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pembinaan Nazhir & Pengelola ZIS</li>
+            <li><i class="fa-solid fa-circle-check"></i> Sosialisasi & Edukasi Wakaf Produktif</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Konsultasi Wakaf <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 8 -->
+        <div class="layanan-card">
+          <div class="layanan-number">08</div>
+          <div class="layanan-icon"><i class="fa-solid fa-database"></i></div>
+          <h3>Pengelolaan Data & Informasi Keagamaan</h3>
+          <p>Pengelolaan, pemutakhiran, dan pemanfaatan data dan informasi keagamaan di wilayah kecamatan secara akurat,
+            transparan, dan berbasis teknologi.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Pemutakhiran Data SIMKAH & SIMAS</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pengelolaan Data Masjid, Wakaf & Ormas</li>
+            <li><i class="fa-solid fa-circle-check"></i> Publikasi Informasi Layanan Keagamaan</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Info Data KUA <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        <!-- 9 -->
+        <div class="layanan-card">
+          <div class="layanan-number">09</div>
+          <div class="layanan-icon"><i class="fa-solid fa-building-user"></i></div>
+          <h3>Ketatausahaan & Kerumahtanggaan KUA</h3>
+          <p>Pelaksanaan ketatausahaan, administrasi umum, kepegawaian, keuangan, dan pengelolaan sarana prasarana
+            kantor KUA secara tertib dan akuntabel.</p>
+          <ul class="layanan-list">
+            <li><i class="fa-solid fa-circle-check"></i> Administrasi Kepegawaian & Keuangan</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pengelolaan Arsip & Dokumen KUA</li>
+            <li><i class="fa-solid fa-circle-check"></i> Pemeliharaan Sarana & Prasarana Kantor</li>
+          </ul>
+          <a href="#forum-konsultasi" class="card-link">Hubungi Kami <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Simulasi Biaya Nikah Section -->
+  <section id="biaya" class="section biaya-section">
+    <div class="container">
+      <div class="biaya-wrapper">
+        <div class="biaya-info-column">
+          <div class="section-tag alt">TRANSPARANSI BIAYA</div>
+          <h2 class="section-title text-white">Berapa Biaya Pelayanan Nikah di KUA?</h2>
+          <p class="text-white-muted">
+            Sesuai Peraturan Pemerintah (PP) No. 59 Tahun 2018, biaya pencatatan nikah berlaku secara nasional dan
+            transparan. Tidak ada biaya tambahan di luar ketentuan resmi!
+          </p>
+
+          <div class="biaya-features">
+            <div class="b-feature">
+              <i class="fa-solid fa-shield-cat"></i>
+              <div>
+                <h4>Pembayaran Resmi via Bank (PNBP)</h4>
+                <p>Biaya nikah luar kantor disetor langsung ke kas negara via Modul Penerimaan Negara (MPN) / Bank BUMN.
+                </p>
+              </div>
+            </div>
+
+            <div class="b-feature">
+              <i class="fa-solid fa-hand-holding-dollar"></i>
+              <div>
+                <h4>Bebas Pungut Liar (Zero Pungli)</h4>
+                <p>Pegawai dan Penghulu KUA dilarang keras menerima gratifikasi atau tip dalam bentuk apapun.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="biaya-calculator-column">
+          <div class="calc-card">
+            <h3><i class="fa-solid fa-calculator"></i> Simulator Tarif Nikah</h3>
+            <p class="calc-sub">Pilih lokasi dan waktu pelaksanaan akad nikah Anda:</p>
+
+            <div class="form-group">
+              <label>Lokasi Akad Nikah</label>
+              <div class="radio-tiles">
+                <label class="tile-option active" id="tile-kua">
+                  <input type="radio" name="calc-location" value="kua" checked>
+                  <i class="fa-solid fa-mosque"></i>
+                  <span>Di Balai Nikah KUA</span>
+                </label>
+
+                <label class="tile-option" id="tile-luar">
+                  <input type="radio" name="calc-location" value="luar">
+                  <i class="fa-solid fa-house-chimney"></i>
+                  <span>Di Luar KUA / Rumah / Gedung</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Waktu Pelaksanaan</label>
+              <select id="calc-time" class="form-control">
+                <option value="jam_kerja">Hari & Jam Kerja Kantor (Senin - Jumat, 07.30 - 16.00 WIB)</option>
+                <option value="luar_jam_kerja">Hari Libur / Sabtu & Minggu / Luar Jam Kerja</option>
+              </select>
+            </div>
+
+            <div class="calc-result-box" id="calc-result">
+              <div class="result-label">Biaya Resmi PNBP:</div>
+              <div class="result-price" id="res-price">Rp 0</div>
+              <div class="result-badge" id="res-badge"><i class="fa-solid fa-gift"></i> GRATIS 100%</div>
+              <p class="result-note" id="res-note">Pernikahan yang dilaksanakan di Balai Nikah KUA pada hari dan jam
+                kerja tidak dipungut biaya apapun (GRATIS).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Syarat & Alur Pendaftaran Nikah -->
+  <section id="syarat" class="section syarat-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">PERSYARATAN & ALUR</div>
+        <h2 class="section-title">Dokumen Kelengkapan Pendaftaran Nikah</h2>
+        <p class="section-description">
+          Persiapkan berkas persyaratan administrasi sebelum mendaftar di KUA atau melalui aplikasi SIMKAH Online.
+        </p>
+      </div>
+
+      <div class="syarat-tabs-wrapper">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="tab-syarat-umum"><i class="fa-solid fa-file-contract"></i> Berkas
+            Umum (N1-N4)</button>
+          <button class="tab-btn" data-tab="tab-khusus"><i class="fa-solid fa-folder-open"></i> Syarat Kondisi
+            Khusus</button>
+          <button class="tab-btn" data-tab="tab-alur"><i class="fa-solid fa-timeline"></i> Alur Pendaftaran
+            SIMKAH</button>
+        </div>
+
+        <div class="tab-content active" id="tab-syarat-umum">
+          <div class="grid grid-2">
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-file-lines"></i> Dokumen Administrasi</h4>
+              <ul class="check-list">
+                <li><i class="fa-solid fa-check"></i> Fotokopi KTP, KK, Akta Kelahiran &amp; Ijazah Terakhir</li>
+                <li><i class="fa-solid fa-check"></i> Formulir Surat Pengantar Nikah dari Kepala Desa/Lurah (Model N1)
+                </li>
+                <li><i class="fa-solid fa-check"></i> Formulir Permohonan Kehendak Nikah (Model N2)</li>
+                <li><i class="fa-solid fa-check"></i> Surat Persetujuan Mempelai (Model N4)</li>
+                <li><i class="fa-solid fa-check"></i> Surat Izin Orang Tua (Model N5)</li>
+                <li><i class="fa-solid fa-check"></i> Fotokopi KTP Wali &amp; 2 Saksi</li>
+                <li><i class="fa-solid fa-check"></i> Photo background biru ukuran 4x6 = 1 lbr, 3x4 = 5 lbr, dan 2x3 = 5
+                  lbr</li>
+              </ul>
+            </div>
+
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-clipboard-list"></i> Persyaratan Tambahan</h4>
+              <ul class="check-list">
+                <li><i class="fa-solid fa-check"></i> Akta Cerai / Akta Kematian bagi yang berstatus Duda/Janda</li>
+                <li><i class="fa-solid fa-check"></i> Surat Dispensasi dari Pengadilan bagi calon suami dan istri yang
+                  berusia kurang dari 19 tahun</li>
+                <li><i class="fa-solid fa-check"></i> Surat Pernyataan Jejaka/Gadis atau Duda/Janda bermaterai Rp
+                  10.000,- / Surat Keterangan Belum Kawin dari Desa</li>
+                <li><i class="fa-solid fa-check"></i> Materai 10.000 (3 lembar)</li>
+                <li><i class="fa-solid fa-check"></i> No. HP dan Email Calon Suami &amp; Istri serta No. HP Wali</li>
+              </ul>
+
+              <div class="syarat-biaya-info">
+                <div class="biaya-item">
+                  <i class="fa-solid fa-mosque"></i>
+                  <div>
+                    <span class="biaya-label">Nikah di KUA</span>
+                    <span class="biaya-value gratis">Rp 0,- (Gratis)</span>
+                  </div>
+                </div>
+                <div class="biaya-item">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <div>
+                    <span class="biaya-label">Nikah di Luar KUA</span>
+                    <span class="biaya-value">Rp 600.000,-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-khusus">
+          <div class="grid grid-3">
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-heart-crack"></i> Duda / Janda Cerai</h4>
+              <p>Membawa <strong>Akta Cerai Asli</strong> dari Pengadilan Agama yang telah berkekuatan hukum tetap.</p>
+            </div>
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-cross"></i> Duda / Janda Ditinggal Mati</h4>
+              <p>Membawa <strong>Surat Keterangan Kematian</strong> Pasangan (Form N6) dari Lurah / Kepala Desa.</p>
+            </div>
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-gavel"></i> Usia Kurang dari 19 Tahun</h4>
+              <p>Membawa <strong>Surat Dispensasi dari Pengadilan</strong> bagi calon suami dan istri yang berusia
+                kurang dari 19 tahun.</p>
+            </div>
+            <div class="syarat-card">
+              <h4><i class="fa-solid fa-shield-halved"></i> Anggota TNI / POLRI</h4>
+              <p>Membawa <strong>Surat Izin Perkawinan</strong> dari Atasan / Komandan Kesatuan resmi.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-alur">
+          <div class="step-flow">
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <h4>Kelurahan / Desa</h4>
+              <p>Mengurus surat pengantar nikah N1-N4 di kantor desa/kelurahan setempat.</p>
+            </div>
+
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <h4>SIMKAH / Daftar KUA</h4>
+              <p>Daftar online di simkah4.kemenag.go.id atau datang ke KUA minimal 10 hari kerja sebelum akad.</p>
+            </div>
+
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <h4>Pemeriksaan Berkas & Bimwin</h4>
+              <p>Pemeriksaan dokumen oleh Penghulu & mengikuti Bimbingan Perkawinan (Suscatin).</p>
+            </div>
+
+            <div class="step-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <h4>Pelaksanaan Akad Nikah</h4>
+              <p>Akad nikah dipimpin Penghulu & penyerahan Buku Nikah resmi + Kartu Nikah Digital.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION PROFIL PEGAWAI KUA (KEPALA, PENGHULU & STAF) -->
+  <section id="pegawai" class="section pegawai-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag">STRUKTUR ORGANISASI & PEGAWAI</div>
+        <h2 class="section-title">Profil Kepala KUA, Penghulu & Staf Pelayanan</h2>
+        <p class="section-description">
+          Mengenal jajaran Aparatur Sipil Negara (ASN) dan Staf di KUA yang siap melayani masyarakat secara profesional
+          dan ramah.
+        </p>
+      </div>
+
+      <!-- Toolbar Filter & Search Pegawai -->
+      <div class="pegawai-toolbar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="pegawai-search" placeholder="Cari nama pegawai, NIP, atau jabatan...">
+        </div>
+
+        <div class="filter-role-buttons" id="pegawai-role-filters">
+          <button class="p-filter-btn active" data-role="all">Semua Pegawai</button>
+          <button class="p-filter-btn" data-role="kepala"><i class="fa-solid fa-user-tie"></i> Kepala KUA</button>
+          <button class="p-filter-btn" data-role="wakil_kepala"><i class="fa-solid fa-user-shield"></i> Wakil Kepala
+            KUA</button>
+          <button class="p-filter-btn" data-role="pembina"><i class="fa-solid fa-award"></i> Pembina</button>
+          <button class="p-filter-btn" data-role="penghulu"><i class="fa-solid fa-scroll"></i> Penghulu</button>
+          <button class="p-filter-btn" data-role="penyuluh"><i class="fa-solid fa-book-quran"></i> Penyuluh
+            Agama</button>
+          <button class="p-filter-btn" data-role="staf"><i class="fa-solid fa-user-gear"></i> Staf Administrasi</button>
+        </div>
+
+        <button id="btn-add-pegawai-main" class="btn btn-primary admin-only" style="display:none;">
+          <i class="fa-solid fa-plus"></i> Tambah Pegawai Baru
+        </button>
+      </div>
+
+      <!-- Pegawai Roster Grid -->
+      <div class="pegawai-grid" id="pegawai-grid">
+        <!-- Cards dynamically injected via JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION FORUM KONSULTASI & TANYA JAWAB SYARIAH KUA -->
+  <section id="forum-konsultasi" class="section forum-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <div class="section-tag"><i class="fa-solid fa-comments"></i> LAYANAN KONSULTASI ONLINE KUA</div>
+        <h2 class="section-title">Forum Tanya Jawab & Konsultasi Syariah</h2>
+        <p class="section-description">
+          Dapatkan bimbingan dan penjelasan resmi seputar Pernikahan, Rujuk, Hukum Waris, Wakaf, Sertifikasi Halal,
+          serta Bimbingan Keluarga Sakinah langsung dari Penghulu dan Penyuluh Agama KUA Kecamatan Nanggung.
+        </p>
+      </div>
+
+      <!-- Highlight Stats Forum -->
+      <div class="forum-stats-bar">
+        <div class="forum-stat-card">
+          <div class="fstat-icon"><i class="fa-solid fa-comments"></i></div>
+          <div class="fstat-info">
+            <span class="fstat-num" id="forum-stat-total">0</span>
+            <span class="fstat-label">Total Konsultasi</span>
+          </div>
+        </div>
+        <div class="forum-stat-card">
+          <div class="fstat-icon answered"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="fstat-info">
+            <span class="fstat-num" id="forum-stat-answered">0</span>
+            <span class="fstat-label">Telah Dijawab Petugas</span>
+          </div>
+        </div>
+        <div class="forum-stat-card">
+          <div class="fstat-icon speed"><i class="fa-solid fa-bolt"></i></div>
+          <div class="fstat-info">
+            <span class="fstat-num">&lt; 24 Jam</span>
+            <span class="fstat-label">Estimasi Respon</span>
+          </div>
+        </div>
+        <div class="forum-stat-card">
+          <div class="fstat-icon free"><i class="fa-solid fa-hand-holding-heart"></i></div>
+          <div class="fstat-info">
+            <span class="fstat-num">100% Gratis</span>
+            <span class="fstat-label">Layanan Tanpa Pungli</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="forum-layout-grid">
+        <!-- Kolom Kiri: Form Pengajuan Konsultasi Baru -->
+        <div class="forum-form-column">
+          <div class="forum-card-box sticky-form-box">
+            <div class="forum-card-header">
+              <div class="forum-icon-badge">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </div>
+              <div>
+                <h3>Ajukan Konsultasi Online</h3>
+                <p>Kirimkan pertanyaan atau bimbingan ke KUA</p>
+              </div>
+            </div>
+
+            <form id="konsultasi-form" class="forum-submit-form">
+              <div class="form-group">
+                <label for="f-nama">Nama Lengkap <span class="required">*</span></label>
+                <input type="text" id="f-nama" class="form-control" placeholder="Contoh: Muhammad Yusuf" required>
+                <div class="anonim-checkbox-wrapper">
+                  <label class="custom-checkbox-label">
+                    <input type="checkbox" id="f-anonim">
+                    <span><i class="fa-solid fa-user-secret"></i> Samarkan nama di forum publik (Anonim)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="f-hp">Nomor WhatsApp / HP Aktif <span class="required">*</span></label>
+                <div class="input-with-prefix">
+                  <span class="input-prefix"><i class="fa-brands fa-whatsapp"></i></span>
+                  <input type="tel" id="f-hp" class="form-control" placeholder="Contoh: 0812-3456-7890" required>
+                </div>
+                <small class="form-hint"><i class="fa-solid fa-lock"></i> Nomor HP dirahasiakan & hanya dilihat Admin
+                  KUA untuk notifikasi / tindak lanjut.</small>
+              </div>
+
+              <div class="form-group">
+                <label for="f-topik">Kategori Konsultasi <span class="required">*</span></label>
+                <select id="f-topik" class="form-control" required>
+                  <option value="Pernikahan & Akad Nikah">💍 Pernikahan & Akad Nikah</option>
+                  <option value="Bimbingan Keluarga & BP4">👨‍👩‍👧 Bimbingan Keluarga Sakinah & BP4</option>
+                  <option value="Hukum Waris (Mawaris)">📜 Hukum Waris & Faraid</option>
+                  <option value="Wakaf & Kemasjidan">🏛️ Wakaf & Kemasjidan</option>
+                  <option value="Sertifikasi Halal UMK">🥗 Sertifikasi Halal UMK (Self Declare)</option>
+                  <option value="Konsultasi Syariah & Fiqih">⚖️ Konsultasi Syariah & Fiqih Lainnya</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="f-judul">Judul Pertanyaan <span class="required">*</span></label>
+                <input type="text" id="f-judul" class="form-control"
+                  placeholder="Contoh: Prosedur rekomendasi nikah luar daerah..." required>
+              </div>
+
+              <div class="form-group">
+                <label for="f-pesan">Uraian Masalah / Pertanyaan <span class="required">*</span></label>
+                <textarea id="f-pesan" class="form-control" rows="4"
+                  placeholder="Jelaskan detail permasalahan, kondisi, atau pertanyaan Anda secara rinci agar Penghulu/Penyuluh dapat memberikan panduan yang tepat..."
+                  required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="label-heading">Opsi Privasi Konsultasi</label>
+                <div class="privacy-options-grid">
+                  <label class="privacy-option-card">
+                    <input type="radio" name="f-visibility" value="public" checked>
+                    <div class="privacy-card-content">
+                      <span class="p-icon"><i class="fa-solid fa-globe"></i></span>
+                      <div>
+                        <strong>Forum Publik</strong>
+                        <small>Ditampilkan di forum sebagai referensi warga lain</small>
+                      </div>
+                    </div>
+                  </label>
+                  <label class="privacy-option-card">
+                    <input type="radio" name="f-visibility" value="private">
+                    <div class="privacy-card-content">
+                      <span class="p-icon"><i class="fa-solid fa-lock"></i></span>
+                      <div>
+                        <strong>Privat (Rahasia)</strong>
+                        <small>Hanya dibaca & dibalas oleh Admin/Penghulu KUA</small>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-submit-konsultasi">
+                <i class="fa-solid fa-paper-plane"></i> Kirim Konsultasi ke KUA
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Kolom Kanan: Feed Forum Publik & Diskusi Tanya Jawab -->
+        <div class="forum-feed-column">
+          <!-- Toolbar Feed & Pencarian -->
+          <div class="forum-toolbar">
+            <div class="forum-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="forum-search-input" placeholder="Cari topik, pertanyaan, atau kata kunci...">
+            </div>
+
+            <!-- Filter Status & Kategori -->
+            <div class="forum-filter-tabs">
+              <button class="forum-tab-btn active" data-filter="all">Semua Konsultasi</button>
+              <button class="forum-tab-btn" data-filter="answered"><i class="fa-solid fa-circle-check"></i> Telah
+                Dijawab KUA</button>
+              <button class="forum-tab-btn" data-filter="pending"><i class="fa-solid fa-clock"></i> Menunggu
+                Respon</button>
+            </div>
+
+            <div class="forum-category-pills" id="forum-category-pills">
+              <button class="cat-pill-btn active" data-cat="all">Semua Kategori</button>
+              <button class="cat-pill-btn" data-cat="Pernikahan & Akad Nikah">💍 Nikah & Rujuk</button>
+              <button class="cat-pill-btn" data-cat="Bimbingan Keluarga & BP4">👨‍👩‍👧 Keluarga & BP4</button>
+              <button class="cat-pill-btn" data-cat="Hukum Waris (Mawaris)">📜 Waris</button>
+              <button class="cat-pill-btn" data-cat="Wakaf & Kemasjidan">🏛️ Wakaf & Masjid</button>
+              <button class="cat-pill-btn" data-cat="Sertifikasi Halal UMK">🥗 Sertifikasi Halal</button>
+              <button class="cat-pill-btn" data-cat="Konsultasi Syariah & Fiqih">⚖️ Syariah</button>
+            </div>
+          </div>
+
+          <!-- Feed Container -->
+          <div id="forum-posts-container" class="forum-posts-list">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-col main-col">
+        <a href="#home" class="brand-logo">
+          <div class="logo-icon"><i class="fa-solid fa-kaaba"></i></div>
+          <div class="logo-text">
+            <span class="brand-name text-white">KUA <span class="highlight-green">KECAMATAN</span></span>
+            <span class="brand-sub">KEMENTERIAN AGAMA RI</span>
+          </div>
+        </a>
+        <p class="footer-text">
+          Portal Resmi Kantor Urusan Agama. Melayani masyarakat dengan prinsip keikhlasan, akuntabilitas, dan integritas
+          bebas pungutan liar.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navigasi Portal</h4>
+        <ul>
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#layanan">Layanan KUA</a></li>
+          <li><a href="#biaya">Simulator Biaya Nikah</a></li>
+          <li><a href="#syarat">Syarat & Alur Nikah</a></li>
+          <li><a href="#pegawai">Profil Pegawai & Penghulu</a></li>
+          <li><a href="#forum-konsultasi">Forum Konsultasi Syariah</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Layanan Publik</h4>
+        <ul>
+          <li><a href="https://kuareservasi.web.id/">Registrasi Online </a></li>
+          <li><a href="#layanan">Bimbingan Perkawinan (Bimwin)</a></li>
+          <li><a href="#layanan">Akta Ikrar Wakaf (AIW)</a></li>
+          <li><a href="#layanan">Pendampingan Halal UMK</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Akses Administrator</h4>
+        <p class="footer-small">Modul pengelolaan data website KUA, informasi pegawai, dan kotak masuk konsultasi
+          masyarakat.</p>
+        <button id="btn-open-login" class="btn btn-outline-white btn-sm margin-top-sm"
+          style="display:inline-flex; gap: 0.5rem; align-items: center;">
+          <i class="fa-solid fa-lock"></i> Login Administrator
+        </button>
+        <button id="btn-add-pegawai-footer" class="btn btn-outline-white btn-sm margin-top-sm admin-only"
+          style="display:none;">
+          <i class="fa-solid fa-user-gear"></i> Kelola Profil Staf KUA
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-bottom text-center">
+      <div class="container">
+        <p>&copy; 2026 Kantor Urusan Agama (KUA) - Kementerian Agama Republik Indonesia. All Rights Reserved. &bull; <a
+            href="javascript:void(0)" id="btn-open-login-link"
+            style="color: #64748b; font-size: 0.8rem; text-decoration: none;"><i class="fa-solid fa-user-shield"></i>
+            Portal Admin</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL DIALOGS ================= -->
+
+  <!-- Modal 1: Detail Profil Pegawai KUA -->
+  <div id="modal-pegawai-detail" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-body" id="modal-pegawai-content">
+        <!-- Injected dynamically via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Form Tambah / Edit Pegawai KUA -->
+  <div id="modal-pegawai-form" class="modal-backdrop">
+    <div class="modal-dialog">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h3 id="form-modal-title"><i class="fa-solid fa-user-pen"></i> Form Profil Pegawai KUA</h3>
+        <p>Isi formulir di bawah ini untuk mengelola profil Pegawai, Penghulu, atau Penyuluh KUA.</p>
+      </div>
+      <div class="modal-body">
+        <form id="pegawai-crud-form">
+          <input type="hidden" id="form-pegawai-id">
+
+          <div class="form-row grid-2">
+            <div class="form-group">
+              <label for="form-nama">Nama Lengkap & Gelar <span class="required">*</span></label>
+              <input type="text" id="form-nama" class="form-control" placeholder="Contoh: H. Ahmad Fauzi, S.Ag., M.H."
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="form-role">Kategori Peran <span class="required">*</span></label>
+              <select id="form-role" class="form-control" required>
+                <option value="kepala">Kepala KUA (Kepala Kantor)</option>
+                <option value="wakil_kepala">Wakil Kepala KUA</option>
+                <option value="pembina">Pembina KUA</option>
+                <option value="penghulu">Penghulu / PPAN</option>
+                <option value="penyuluh">Penyuluh Agama Islam</option>
+                <option value="staf">Staf Administrasi & Pelayanan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row grid-2">
+            <div class="form-group">
+              <label for="form-nip">NIP (Nomor Induk Pegawai) <span class="required">*</span></label>
+              <input type="text" id="form-nip" class="form-control" placeholder="19780512 200501 1 003" required>
+            </div>
+
+            <div class="form-group">
+              <label for="form-jabatan">Jabatan Resmi <span class="required">*</span></label>
+              <input type="text" id="form-jabatan" class="form-control"
+                placeholder="Contoh: Wakil Kepala KUA / Pembina KUA / Penghulu Ahli Madya" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-wilayah">Wilayah Binaan / Tugas <span class="required">*</span></label>
+            <input type="text" id="form-wilayah" class="form-control"
+              placeholder="Contoh: Kelurahan Sukamaju & Sukadamai" required>
+          </div>
+
+          <div class="form-group">
+            <label for="form-bio">Deskripsi Peran & Tugas Pelayanan <span class="required">*</span></label>
+            <textarea id="form-bio" class="form-control" rows="3"
+              placeholder="Jelaskan peran tugas pelayanan nikah, bimbingan, atau administrasi..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="form-hp">Nomor HP / WhatsApp <span class="required">*</span></label>
+            <input type="text" id="form-hp" class="form-control" placeholder="0812-3456-7890" required>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Batal</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Data
+              Pegawai</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Inbox / Manajemen Konsultasi Admin -->
+  <div id="modal-inbox" class="modal-backdrop">
+    <div class="modal-dialog modal-xl">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <div class="d-flex align-items-center justify-content-between w-100 flex-wrap gap-2">
+          <div>
+            <h3><i class="fa-solid fa-envelope-open-text highlight-green"></i> Panel Manajemen Konsultasi KUA</h3>
+            <p>Pantau seluruh konsultasi masuk, berikan tanggapan resmi syariah, hubungi via WhatsApp, dan kelola status
+              pesan.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Admin KPI Summary Bar -->
+        <div class="admin-inbox-kpi-bar">
+          <div class="admin-kpi-chip active" data-inbox-filter="all">
+            <span class="kpi-num" id="admin-kpi-total">0</span>
+            <span class="kpi-title">Semua Pesan</span>
+          </div>
+          <div class="admin-kpi-chip chip-warning" data-inbox-filter="pending">
+            <span class="kpi-num" id="admin-kpi-pending">0</span>
+            <span class="kpi-title">Menunggu Tanggapan</span>
+          </div>
+          <div class="admin-kpi-chip chip-success" data-inbox-filter="answered">
+            <span class="kpi-num" id="admin-kpi-answered">0</span>
+            <span class="kpi-title">Telah Dijawab</span>
+          </div>
+          <div class="admin-kpi-chip chip-info" data-inbox-filter="private">
+            <span class="kpi-num" id="admin-kpi-private">0</span>
+            <span class="kpi-title">Konsultasi Privat</span>
+          </div>
+        </div>
+
+        <!-- Search Bar in Admin Modal -->
+        <div class="admin-inbox-toolbar">
+          <div class="search-box" style="width: 100%;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="admin-inbox-search"
+              placeholder="Cari nama pemohon, nomor WA, topik, atau kata kunci...">
+          </div>
+        </div>
+
+        <div id="inbox-list" class="admin-inbox-list-container">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Balas / Beri Jawaban Resmi Konsultasi (Admin & Pegawai) -->
+  <div id="modal-jawab-konsultasi" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h3 id="jawab-modal-title"><i class="fa-solid fa-reply highlight-green"></i> Jawaban Resmi Konsultasi KUA</h3>
+        <p id="jawab-modal-subtitle">Tuliskan tanggapan, fatwa, atau bimbingan resmi atas pertanyaan pemohon.</p>
+      </div>
+      <div class="modal-body">
+        <form id="form-jawab-konsultasi">
+          <input type="hidden" id="jawab-konsultasi-id">
+
+          <!-- Ringkasan Pertanyaan Pemohon -->
+          <div class="pertanyaan-preview-box" id="jawab-pertanyaan-preview">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="form-group">
+            <label for="jawab-petugas">Petugas / Penghulu / Penyuluh Penjawab <span class="required">*</span></label>
+            <select id="jawab-petugas" class="form-control" required>
+              <!-- Diisi dinamis dari daftar pegawai KUA -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="jawab-isi">Isi Jawaban & Bimbingan Resmi KUA <span class="required">*</span></label>
+            <textarea id="jawab-isi" class="form-control" rows="6"
+              placeholder="Tuliskan jawaban, penjelasan syariah, dasar hukum / regulasi Kemenag, atau langkah teknis yang harus dilakukan pemohon..."
+              required></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Batal</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Simpan & Publikasikan
+              Jawaban</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Login Admin -->
+  <div id="modal-login" class="modal-backdrop">
+    <div class="modal-dialog modal-login">
+      <div class="login-header">
+        <div class="login-logo">
+          <i class="fa-solid fa-kaaba"></i>
+        </div>
+        <h2>Login Administrator</h2>
+        <p>Masukkan kredensial Anda untuk mengakses panel pengelolaan website KUA</p>
+      </div>
+      <div class="modal-body">
+        <form id="login-form" autocomplete="off">
+          <div id="login-error" class="login-error" style="display:none;">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="login-error-text">Username atau password salah.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="login-username">
+              <i class="fa-solid fa-user"></i> Username Admin
+            </label>
+            <input type="text" id="login-username" class="form-control" placeholder="Masukkan username admin"
+              autocomplete="off" required>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">
+              <i class="fa-solid fa-key"></i> Password
+            </label>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" class="form-control" placeholder="Masukkan password"
+                autocomplete="off" required>
+              <button type="button" id="toggle-password" class="toggle-pw-btn">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+
+
+          <button type="submit" class="btn btn-primary btn-block" id="btn-do-login">
+            <i class="fa-solid fa-right-to-bracket"></i> Masuk sebagai Admin
+          </button>
+
+          <button type="button" class="btn btn-outline btn-block margin-top-sm" data-close-modal>
+            <i class="fa-solid fa-xmark"></i> Batal
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot AI KUA Widget -->
+  <div id="chatbot-widget">
+    <!-- Floating Action Button -->
+    <button id="chatbot-fab" class="chatbot-fab" aria-label="Buka Chatbot KUA">
+      <i class="fa-solid fa-comment-dots chatbot-fab-icon-open"></i>
+      <i class="fa-solid fa-xmark chatbot-fab-icon-close"></i>
+      <span class="chatbot-fab-badge">1</span>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="chatbot-window" class="chatbot-window">
+      <div class="chatbot-header">
+        <div class="chatbot-header-info">
+          <div class="chatbot-header-avatar">
+            <i class="fa-solid fa-mosque"></i>
+          </div>
+          <div>
+            <h4>Asisten KUA Nanggung</h4>
+            <span class="chatbot-status"><span class="chatbot-status-dot"></span> Online — Siap Membantu</span>
+          </div>
+        </div>
+        <button id="chatbot-close" class="chatbot-close-btn" aria-label="Tutup Chat">
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+
+      <div id="chatbot-messages" class="chatbot-messages">
+        <!-- Messages injected by JS -->
+      </div>
+
+      <div id="chatbot-suggestions" class="chatbot-suggestions">
+        <!-- Suggestion chips injected by JS -->
+      </div>
+
+      <div class="chatbot-input-area">
+        <input type="text" id="chatbot-input" class="chatbot-input" placeholder="Ketik pertanyaan Anda..."
+          autocomplete="off">
+        <button id="chatbot-send" class="chatbot-send-btn" aria-label="Kirim Pesan">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js?v=2"></script>
+</body>
+
+</html>

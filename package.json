@@ -1,0 +1,14 @@
+{
+  "name": "kua-website",
+  "version": "1.0.0",
+  "description": "Portal Resmi Kantor Urusan Agama (KUA)",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static build ready'",
+    "deploy": "wrangler pages deploy . --project-name=kua-website",
+    "preview": "wrangler pages dev ."
+  },
+  "devDependencies": {
+    "wrangler": "^3.114.0"
+  }
+}
