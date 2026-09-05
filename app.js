@@ -392,7 +392,7 @@ class KuaState {
   }
 
   loadPegawaiFromStorage() {
-    const saved = localStorage.getItem("kua_pegawai_data");
+    const saved = localStorage.getItem("kua_pegawai_data_v2");
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -400,12 +400,12 @@ class KuaState {
         console.error("Gagal membaca data dari LocalStorage", e);
       }
     }
-    localStorage.setItem("kua_pegawai_data", JSON.stringify(DEFAULT_KUA_PEGAWAI));
+    localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(DEFAULT_KUA_PEGAWAI));
     return DEFAULT_KUA_PEGAWAI;
   }
 
   savePegawaiToStorage() {
-    localStorage.setItem("kua_pegawai_data", JSON.stringify(this.pegawaiList));
+    localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(this.pegawaiList));
     // Sinkron ke cloud jika admin sedang login
     if (this.isAdmin) {
       this._syncToCloud();
@@ -428,7 +428,7 @@ class KuaState {
     const data = await cloudPull();
     if (data && data.pegawai && Array.isArray(data.pegawai) && data.pegawai.length > 0) {
       this.pegawaiList = data.pegawai;
-      localStorage.setItem("kua_pegawai_data", JSON.stringify(this.pegawaiList));
+      localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(this.pegawaiList));
       console.log("[KUA] Data pegawai diperbarui dari cloud:", data.updatedAt);
       return true;
     }
