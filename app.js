@@ -11,7 +11,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19750812 200212 1 003",
     jabatan: "Kepala KUA Kecamatan Nanggung",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/baday",
+    avatar: "foto/baday.jpg",
     bio: "Memimpin pelayanan KUA dengan prinsip integritas, pelayanan cepat bebas pungli, dan pembinaan keluarga sakinah mawaddah wa rahmah di wilayah kecamatan.",
     keahlian: ["Hukum Munakahat", "Manajemen Pelayanan Publik", "Penasihat BP4", "Kepemimpinan Syariah"],
     email: "baday@kemenag.go.id",
@@ -20,132 +20,145 @@ const DEFAULT_KUA_PEGAWAI = [
   {
     id: "kua-2",
     nama: "Acep, S.Ag.",
-    role: "Penghulu Ahli Madya",
+    role: "wakil_kepala",
     nip: "196910131992031002",
-    jabatan: "Wakli Kepala KUA",
+    jabatan: "Wakil Kepala KUA",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/Acep",
-    bio: "Pejabat Pencatat Nikah (PPAN) senior yang melayani pemeriksaan berkas nikah N1-N4, verifikasi SIMKAH, dan memimpin majelis akad nikah.",
+    avatar: "foto/acep.jpg",
+    bio: "Mendampingi Kepala KUA dalam tugas-tugas administratif, pelayanan keagamaan, serta pengawasan lintas program KUA.",
     keahlian: ["Pemeriksaan Berkas N1-N4", "Legalitas Akta Nikah", "Konseling Suscatin"],
-    email: "muhammad.ridwan@kemenag.go.id",
+    email: "acep@kemenag.go.id",
     hp: "0813-8877-6655"
   },
   {
     id: "kua-3",
-    nama: "Siti Maryam, S.Th.I., M.Pd.",
-    role: "penyuluh",
-    nip: "19840620 200912 2 005",
-    jabatan: "Penyuluh Agama Islam Fungsional",
-    wilayah: "Kelurahan Mekarjaya & Bimbingan BP4",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
-    bio: "Penyuluh Agama Islam spesialis Bimbingan Perkawinan (Bimwin) calon pengantin dan konseling psikologi rumah tangga sakinah.",
-    keahlian: ["Bimbingan Perkawinan (Bimwin)", "Konseling Rumah Tangga BP4", "Edukasi Pencegahan Stunting"],
-    email: "siti.maryam@kemenag.go.id",
-    hp: "0815-1122-3344"
+    nama: "Ahmad Fadhil, S.Hum.",
+    role: "penghulu",
+    nip: "200102022025051006",
+    jabatan: "Penghulu Ahli Pertama",
+    wilayah: "KUA Kecamatan Nanggung",
+    avatar: "foto/fadhil.jpg",
+    bio: "Penghulu KUA yang aktif melayani pemeriksaan nikah, bimbingan calon pengantin (Bimwin), dan pelayanan akad nikah.",
+    keahlian: ["Fiqih Munakahat", "Akta Nikah SIMKAH", "Bimbingan Calon Pengantin"],
+    email: "ahmad.fadhil@kemenag.go.id",
+    hp: "0812-3456-7890"
   },
   {
     id: "kua-4",
-    nama: "Ustadz Zulkifli, S.H.I.",
-    role: "penghulu",
-    nip: "19881104 201403 1 001",
-    jabatan: "Penghulu Ahli Muda",
-    wilayah: "Kelurahan Harapan Baru",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80",
-    bio: "Penghulu KUA yang aktif memberikan bimbingan syariat nikah, registrasi rujuk, dan pelayanan akad nikah baik di kantor maupun bedhol.",
-    keahlian: ["Fiqih Munakahat", "Akta Nikah SIMKAH", "Bimbingan Calon Pengantin"],
-    email: "zulkifli@kemenag.go.id",
-    hp: "0817-6655-4433"
+    nama: "Ating, Lc.",
+    role: "penyuluh",
+    nip: "198603112023211015",
+    jabatan: "Penyuluh Agama Islam",
+    wilayah: "Kecamatan Nanggung",
+    avatar: "foto/ating.jpg",
+    bio: "Penyuluh fungsional yang aktif memberikan pembinaan majelis taklim, khutbah Jumat, dan bimbingan keagamaan masyarakat.",
+    keahlian: ["Pembinaan Majelis Taklim", "Bimbingan Syariah", "Konseling Rohani"],
+    email: "ating@kemenag.go.id",
+    hp: "0813-2233-4455"
   },
   {
     id: "kua-5",
-    nama: "Dewi Rahmawati, S.E.",
+    nama: "Dede Nurdiansah, S.Pd.I.",
+    role: "penyuluh",
+    nip: "198701112025211011",
+    jabatan: "Penyuluh Agama Islam",
+    wilayah: "Kecamatan Nanggung",
+    avatar: "foto/dede.png",
+    bio: "Penyuluh yang membina program pengajian rutin, konsultasi keluarga sakinah, dan pembinaan generasi muda Islam.",
+    keahlian: ["Konseling Keluarga", "Pembinaan Rohani", "Bimbingan BP4"],
+    email: "dede@kemenag.go.id",
+    hp: "0815-6677-8899"
+  },
+  {
+    id: "kua-6",
+    nama: "Razmi Mujibullah, S.H.I.",
+    role: "penyuluh",
+    nip: "198902042023211023",
+    jabatan: "Penyuluh Agama Islam",
+    wilayah: "Kecamatan Nanggung",
+    avatar: "foto/razmi.jpg",
+    bio: "Penyuluh Agama Islam yang fokus pada bimbingan perkawinan pra-nikah dan penyuluhan hukum keluarga Islam.",
+    keahlian: ["Hukum Keluarga Islam", "Bimwin Pranikah", "Penyuluhan BP4"],
+    email: "razmi@kemenag.go.id",
+    hp: "0817-1122-3344"
+  },
+  {
+    id: "kua-7",
+    nama: "Neny Mardiani, S.Pd.I.",
+    role: "penyuluh",
+    nip: "197806152025212011",
+    jabatan: "Penyuluh Agama Islam",
+    wilayah: "Kecamatan Nanggung",
+    avatar: "foto/neny.jpg",
+    bio: "Penyuluh spesialis pembinaan majelis taklim kaum ibu, pencegahan stunting calon pengantin, dan ketahanan keluarga sakinah.",
+    keahlian: ["Majelis Taklim Ibu-Ibu", "Pencegahan Stunting", "Konseling Sakinah"],
+    email: "neny@kemenag.go.id",
+    hp: "0818-4455-6677"
+  },
+  {
+    id: "kua-8",
+    nama: "Kiki, S.E.",
     role: "staf",
     nip: "19920418 201802 2 004",
     jabatan: "Staf Administrasi & Operator SIMKAH",
     wilayah: "Front Office Pelayanan KUA",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+    avatar: "foto/kiki.jpg",
     bio: "Petugas staf administrasi front office yang melayani verifikasi pendaftaran SIMKAH online, validasi dokumen, dan pencetakan Buku Nikah.",
     keahlian: ["Operator SIMKAH Web 4.0", "Pelayanan Front Office", "Pengarsipan Akta Nikah"],
-    email: "dewi.rahma@kemenag.go.id",
-    hp: "0819-2233-4455"
-  },
-  {
-    id: "kua-6",
-    nama: "H. Ahmad Syarifuddin, S.Ag.",
-    role: "penyuluh",
-    nip: "19810110 200801 1 006",
-    jabatan: "Penyuluh Zakat, Wakaf & Halal",
-    wilayah: "Binaan Wakaf & Sertifikasi Halal UMK",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
-    bio: "Penyuluh spesialis penerbitan Akta Ikrar Wakaf (AIW), pendampingan Sertifikasi Halal Gratis (SEHALAL UMK), dan pengawasan masjid.",
-    keahlian: ["Akta Ikrar Wakaf (AIW)", "Pendamping PPH Halal", "Pembinaan Kemasjidan"],
-    email: "ahmad.syarif@kemenag.go.id",
-    hp: "0812-9988-1122"
-  },
-  {
-    id: "kua-7",
-    nama: "Drs. H. Sulaiman, M.Sy.",
-    role: "wakil_kepala",
-    nip: "19760520 200312 1 002",
-    jabatan: "Wakil Kepala KUA",
-    wilayah: "Kecamatan Utama",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80",
-    bio: "Mendampingi Kepala KUA dalam tugas-tugas administratif, pelayanan keagamaan, serta menjadi koordinator pengawasan lintas program KUA.",
-    keahlian: ["Manajemen Organisasi", "Hukum Keluarga Islam", "Supervisi Pelayanan"],
-    email: "sulaiman.wakil@kemenag.go.id",
-    hp: "0812-4455-6677"
-  },
-  {
-    id: "kua-pembina",
-    nama: "K.H. Mustofa Bisri, Lc.",
-    role: "pembina",
-    nip: "-",
-    jabatan: "Pembina Keagamaan",
-    wilayah: "Seluruh Wilayah Kecamatan",
-    avatar: "https://images.unsplash.com/photo-1555952517-2e8af1a4f61b?auto=format&fit=crop&w=400&q=80",
-    bio: "Memberikan nasihat, bimbingan, dan fatwa keagamaan untuk meningkatkan kualitas spiritual masyarakat dan staf KUA.",
-    keahlian: [],
-    email: "mustofa.pembina@kemenag.go.id",
-    hp: "0811-1234-5678"
-  },
-  {
-    id: "kua-8",
-    nama: "H. Abdullah Faqih, S.Ag.",
-    role: "penghulu",
-    nip: "19800714 200604 1 004",
-    jabatan: "Penghulu Ahli Muda",
-    wilayah: "Kelurahan Cempaka & Melati",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
-    bio: "Berpengalaman dalam memimpin akad nikah di berbagai kondisi, memberikan penyuluhan pra-nikah, dan membantu verifikasi dokumen perkawinan.",
-    keahlian: ["Fiqih Munakahat", "Bimbingan Pra-nikah", "Pemeriksaan Dokumen"],
-    email: "abdullah.faqih@kemenag.go.id",
-    hp: "0813-1122-4455"
+    email: "kiki@kemenag.go.id",
+    hp: "0819-3344-5566"
   },
   {
     id: "kua-9",
-    nama: "Ustadz Hasan Basri, Lc., M.A.",
-    role: "penghulu",
-    nip: "19850228 201011 1 003",
-    jabatan: "Penghulu Pertama",
-    wilayah: "Kelurahan Kenanga",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
-    bio: "Lulusan Timur Tengah yang mendedikasikan ilmunya untuk memberikan bimbingan keluarga harmonis sesuai tuntunan sunnah serta melayani akad nikah.",
-    keahlian: ["Bahasa Arab", "Konseling Keluarga", "Bimbingan Rohani"],
-    email: "hasan.basri@kemenag.go.id",
-    hp: "0815-5566-7788"
+    nama: "Tia, S.AP.",
+    role: "staf",
+    nip: "19940712 202012 2 008",
+    jabatan: "Staf Pelayanan & Umum",
+    wilayah: "Front Office KUA",
+    avatar: "foto/tia.jpg",
+    bio: "Melayani legalisasi buku nikah, surat rekomendasi nikah luar daerah, dan pelayanan informasi umum publik.",
+    keahlian: ["Legalisasi Dokumen", "Administrasi Umum", "Front Office"],
+    email: "tia@kemenag.go.id",
+    hp: "0821-5566-7788"
   },
   {
     id: "kua-10",
-    nama: "H. Ibrahim Malik, S.H.I.",
+    nama: "Jajang, S.Sos.",
+    role: "staf",
+    nip: "19850315 201201 1 007",
+    jabatan: "Staf Tata Usaha",
+    wilayah: "KUA Kecamatan Nanggung",
+    avatar: "foto/jajang.jpg",
+    bio: "Mengelola persuratan, kearsipan dinas, inventaris dan sarana prasarana penunjang operasional kantor KUA.",
+    keahlian: ["Tata Usaha", "Manajemen Kearsipan", "Sarana Prasarana"],
+    email: "jajang@kemenag.go.id",
+    hp: "0812-7788-9900"
+  },
+  {
+    id: "kua-11",
+    nama: "Maman, S.Ag.",
     role: "penghulu",
-    nip: "19821210 200701 1 005",
-    jabatan: "Penghulu Madya",
-    wilayah: "Kelurahan Anggrek",
-    avatar: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?auto=format&fit=crop&w=400&q=80",
-    bio: "Penghulu senior yang sering menjadi rujukan terkait persoalan fikih keluarga, pembagian waris, dan perwalian dalam pernikahan.",
-    keahlian: ["Faraid (Waris)", "Fikih Perwalian", "Resolusi Konflik Keluarga"],
-    email: "ibrahim.malik@kemenag.go.id",
-    hp: "0811-2233-4455"
+    nip: "19830510 200903 1 005",
+    jabatan: "Penghulu Ahli Muda",
+    wilayah: "KUA Kecamatan Nanggung",
+    avatar: "foto/maman.jpg",
+    bio: "Melayani bimbingan pranikah calon pengantin, pemeriksaan saksi dan wali nikah, serta memimpin prosesi ijab kabul akad nikah.",
+    keahlian: ["Fiqih Munakahat", "Akad Nikah", "Bimwin BP4"],
+    email: "maman@kemenag.go.id",
+    hp: "0813-4455-6677"
+  },
+  {
+    id: "kua-12",
+    nama: "Elya, S.Ag.",
+    role: "penghulu",
+    nip: "19810820 200801 1 006",
+    jabatan: "Penghulu Ahli Muda",
+    wilayah: "KUA Kecamatan Nanggung",
+    avatar: "foto/elya.jpg",
+    bio: "Melayani pelayanan pendaftaran akad nikah di kantor maupun bedhol luar kantor, verifikasi status wali, dan registrasi nikah rujuk.",
+    keahlian: ["Pemeriksaan Wali Nikah", "Nikah Bedhol", "Registrasi SIMKAH"],
+    email: "elya@kemenag.go.id",
+    hp: "0815-7788-1122"
   }
 ];
 
@@ -392,7 +405,7 @@ class KuaState {
   }
 
   loadPegawaiFromStorage() {
-    const saved = localStorage.getItem("kua_pegawai_data_v2");
+    const saved = localStorage.getItem("kua_pegawai_data_v3");
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -400,12 +413,12 @@ class KuaState {
         console.error("Gagal membaca data dari LocalStorage", e);
       }
     }
-    localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(DEFAULT_KUA_PEGAWAI));
+    localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(DEFAULT_KUA_PEGAWAI));
     return DEFAULT_KUA_PEGAWAI;
   }
 
   savePegawaiToStorage() {
-    localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(this.pegawaiList));
+    localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
     // Sinkron ke cloud jika admin sedang login
     if (this.isAdmin) {
       this._syncToCloud();
@@ -428,7 +441,7 @@ class KuaState {
     const data = await cloudPull();
     if (data && data.pegawai && Array.isArray(data.pegawai) && data.pegawai.length > 0) {
       this.pegawaiList = data.pegawai;
-      localStorage.setItem("kua_pegawai_data_v2", JSON.stringify(this.pegawaiList));
+      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
       console.log("[KUA] Data pegawai diperbarui dari cloud:", data.updatedAt);
       return true;
     }
@@ -703,7 +716,7 @@ function renderPegawaiGrid() {
         ` : ''}
 
         <div class="pegawai-avatar-wrapper">
-          <img src="${p.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'}" alt="${p.nama}" class="pegawai-avatar">
+          <img src="${p.avatar || 'foto/baday.jpg'}" alt="${p.nama}" class="pegawai-avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=' + encodeURIComponent('${p.nama}') + '&background=16a34a&color=fff&size=200';">
           ${state.isAdmin ? `
           <button class="btn-quick-edit admin-only" title="Ubah Foto Profil" onclick="promptEditAvatar('${p.id}')">
             <i class="fa-solid fa-camera"></i>

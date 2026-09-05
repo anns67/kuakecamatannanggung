@@ -2689,25 +2689,110 @@ img {
   }
 
   .pegawai-card {
-    padding: 0.875rem;
+    padding: 0.85rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .pegawai-badge {
+    position: static;
+    margin-bottom: 0.5rem;
+    font-size: 0.62rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-full);
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .card-actions-top {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    gap: 0.25rem;
+  }
+
+  .action-btn-mini {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  .pegawai-avatar-wrapper {
+    width: 76px;
+    height: 76px;
+    min-width: 76px;
+    min-height: 76px;
+    margin: 0.2rem auto 0.6rem;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .pegawai-avatar {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: 2.5px solid var(--kua-primary);
   }
 
-  .pegawai-name {
-    font-size: 0.9rem;
-  }
-
-  .pegawai-role-badge {
+  .btn-quick-edit {
+    width: 24px;
+    height: 24px;
     font-size: 0.65rem;
-    padding: 0.15rem 0.5rem;
   }
 
-  .pegawai-info-item {
-    font-size: 0.75rem;
+  .pegawai-nip {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    margin-bottom: 0.35rem;
+    max-width: 100%;
+    word-break: break-all;
+    line-height: 1.2;
+  }
+
+  .pegawai-nama {
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+  }
+
+  .pegawai-jabatan {
+    font-size: 0.72rem;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+  }
+
+  .pegawai-wilayah {
+    font-size: 0.68rem;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .pegawai-card-footer {
+    width: 100%;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .pegawai-card-footer .btn {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.4rem;
+    width: 100%;
   }
 
   /* === KONTAK === */
@@ -2987,20 +3072,53 @@ img {
   /* Pegawai 2 kolom tetap di 480px */
   .pegawai-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
   .pegawai-card {
-    padding: 0.7rem;
+    padding: 0.7rem 0.4rem;
+  }
+
+  .pegawai-badge {
+    font-size: 0.58rem;
+    padding: 0.15rem 0.45rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .pegawai-avatar-wrapper {
+    width: 68px;
+    height: 68px;
+    min-width: 68px;
+    min-height: 68px;
+    margin: 0.15rem auto 0.45rem;
   }
 
   .pegawai-avatar {
-    width: 52px;
-    height: 52px;
+    width: 100%;
+    height: 100%;
   }
 
-  .pegawai-name {
+  .pegawai-nama {
     font-size: 0.82rem;
+  }
+
+  .pegawai-nip {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+  }
+
+  .pegawai-jabatan {
+    font-size: 0.68rem;
+  }
+
+  .pegawai-wilayah {
+    font-size: 0.64rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .pegawai-card-footer .btn {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.25rem;
   }
 
   /* Footer 2 kolom */

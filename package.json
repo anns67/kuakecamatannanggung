@@ -4,7 +4,7 @@
   "description": "Portal Resmi Kantor Urusan Agama (KUA)",
   "private": true,
   "scripts": {
-    "build": "mkdir -p dist && cp index.html styles.css app.js batik-pattern.jpg dist/",
+    "build": "mkdir -p dist && cp index.html styles.css app.js batik-pattern.jpg dist/ && cp -r foto dist/",
     "deploy": "wrangler pages deploy dist --project-name=kua-website",
     "preview": "wrangler pages dev dist"
   },

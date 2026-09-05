@@ -34,6 +34,11 @@ foreach ($file in $filesToCopy) {
     }
 }
 
+if (Test-Path "foto") {
+    Copy-Item "foto" "dist\foto" -Recurse -Force
+    Write-Host "   OK Copied: foto/ folder" -ForegroundColor Green
+}
+
 Write-Host ""
 
 # ---- STEP 2: Git Add ----
