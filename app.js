@@ -6,16 +6,16 @@
 const DEFAULT_KUA_PEGAWAI = [
   {
     id: "kua-1",
-    nama: "",
+    nama: "H. Baday, S.Ag.",
     role: "kepala",
     nip: "19750812 200212 1 003",
-    jabatan: "Kepala KUA Kecamatan",
-    wilayah: "Kecamatan Utama & Penasihat BP4",
-    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
+    jabatan: "Kepala KUA Kecamatan Nanggung",
+    wilayah: "KUA Kecamatan Nanggung",
+    avatar: "foto/baday",
     bio: "Memimpin pelayanan KUA dengan prinsip integritas, pelayanan cepat bebas pungli, dan pembinaan keluarga sakinah mawaddah wa rahmah di wilayah kecamatan.",
     keahlian: ["Hukum Munakahat", "Manajemen Pelayanan Publik", "Penasihat BP4", "Kepemimpinan Syariah"],
-    email: "ahmad.fauzi@kemenag.go.id",
-    hp: "0812-3456-7890"
+    email: "baday@kemenag.go.id",
+    hp: "0857-1535-4226"
   },
   {
     id: "kua-2",
