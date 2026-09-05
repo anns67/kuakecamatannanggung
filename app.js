@@ -271,6 +271,39 @@ const DEFAULT_KUA_KONSULTASI = [
   }
 ];
 
+// --- CLOUD SYNC CONFIG (JSONBin.io) ---
+// Data pegawai tersimpan di cloud agar sinkron di semua perangkat
+const CLOUD_SYNC = {
+  // Bin ID dan API Key JSONBin.io - dibuat otomatis saat pertama kali sync
+  binId: localStorage.getItem("kua_jsonbin_id") || null,
+  apiKey: "$2a$10$KUA_PLACEHOLDER_KEY", // Akan diganti setelah setup JSONBin
+  baseUrl: "https://api.jsonbin.io/v3",
+  enabled: false // Akan true setelah binId tersedia
+};
+
+async function cloudPush(data) {
+  if (!CLOUD_SYNC.enabled || !CLOUD_SYNC.binId) return false;
+  try {
+    const res = await fetch(`${CLOUD_SYNC.baseUrl}/b/${CLOUD_SYNC.binId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Master-Key": CLOUD_SYNC.apiKey },
+      body: JSON.stringify(data)
+    });
+    return res.ok;
+  } catch (e) { return false; }
+}
+
+async function cloudPull() {
+  if (!CLOUD_SYNC.enabled || !CLOUD_SYNC.binId) return null;
+  try {
+    const res = await fetch(`${CLOUD_SYNC.baseUrl}/b/${CLOUD_SYNC.binId}/latest`, {
+      headers: { "X-Master-Key": CLOUD_SYNC.apiKey, "X-Bin-Meta": "false" }
+    });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
 // --- APP STATE MANAGEMENT ---
 class KuaState {
   constructor() {
@@ -373,6 +406,33 @@ class KuaState {
 
   savePegawaiToStorage() {
     localStorage.setItem("kua_pegawai_data", JSON.stringify(this.pegawaiList));
+    // Sinkron ke cloud jika admin sedang login
+    if (this.isAdmin) {
+      this._syncToCloud();
+    }
+  }
+
+  async _syncToCloud() {
+    const payload = { pegawai: this.pegawaiList, updatedAt: new Date().toISOString() };
+    const ok = await cloudPush(payload);
+    const badge = document.getElementById("cloud-sync-badge");
+    if (badge) {
+      badge.textContent = ok ? "✓ Tersimpan ke Cloud" : "⚠ Offline (tersimpan lokal)";
+      badge.style.color = ok ? "#22c55e" : "#f59e0b";
+      badge.style.display = "inline";
+      setTimeout(() => { badge.style.display = "none"; }, 3000);
+    }
+  }
+
+  async loadFromCloud() {
+    const data = await cloudPull();
+    if (data && data.pegawai && Array.isArray(data.pegawai) && data.pegawai.length > 0) {
+      this.pegawaiList = data.pegawai;
+      localStorage.setItem("kua_pegawai_data", JSON.stringify(this.pegawaiList));
+      console.log("[KUA] Data pegawai diperbarui dari cloud:", data.updatedAt);
+      return true;
+    }
+    return false;
   }
 
   addPegawai(pegawai) {
@@ -422,13 +482,22 @@ class KuaState {
 const state = new KuaState();
 
 // --- INITIALIZATION ---
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   initNavbar();
   initHeroImg();
   initCounters();
   initBiayaCalculator();
   initSyaratTabs();
-  renderPegawaiGrid();
+
+  // Coba ambil data terbaru dari cloud (agar HP & desktop sinkron)
+  if (CLOUD_SYNC.enabled) {
+    const updated = await state.loadFromCloud();
+    if (updated) renderPegawaiGrid();
+    else renderPegawaiGrid();
+  } else {
+    renderPegawaiGrid();
+  }
+
   initForum();
   initEventListeners();
   updateAdminInboxBadge();
@@ -873,6 +942,53 @@ function initEventListeners() {
   document.getElementById("btn-add-pegawai-nav")?.addEventListener("click", openAddPegawaiModal);
   document.getElementById("btn-add-pegawai-main")?.addEventListener("click", openAddPegawaiModal);
   document.getElementById("btn-add-pegawai-footer")?.addEventListener("click", openAddPegawaiModal);
+
+  // --- EKSPOR DATA PEGAWAI ---
+  document.getElementById("btn-export-data")?.addEventListener("click", () => {
+    const exportData = {
+      pegawai: state.pegawaiList,
+      konsultasi: state.konsultasiList,
+      exportedAt: new Date().toISOString(),
+      version: "1.0"
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const tgl = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `kua-data-backup-${tgl}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("✓ Data berhasil diekspor! Kirim file ini ke perangkat lain lalu klik Impor Data.", "success");
+  });
+
+  // --- IMPOR DATA PEGAWAI ---
+  document.getElementById("import-data-file")?.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if (imported.pegawai && Array.isArray(imported.pegawai)) {
+          state.pegawaiList = imported.pegawai;
+          state.savePegawaiToStorage();
+          renderPegawaiGrid();
+          showToast(`✓ Data ${imported.pegawai.length} pegawai berhasil diimpor dari file backup!`, "success");
+        }
+        if (imported.konsultasi && Array.isArray(imported.konsultasi)) {
+          state.konsultasiList = imported.konsultasi;
+          state.saveKonsultasiToStorage();
+          updateAdminInboxBadge();
+          showToast(`✓ Data ${imported.konsultasi.length} konsultasi juga berhasil diimpor!`, "success");
+        }
+      } catch (err) {
+        showToast("✗ File tidak valid. Pastikan file JSON dari ekspor KUA.", "error");
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
 
   // Filter Buttons Pegawai Role
   const roleFilterBtns = document.querySelectorAll("#pegawai-role-filters .p-filter-btn");

@@ -38,8 +38,18 @@
       <div class="admin-bar-left">
         <span class="admin-bar-icon"><i class="fa-solid fa-user-shield"></i></span>
         <span>Mode <strong>Administrator</strong> — Anda dapat mengelola konten website KUA</span>
+        <span id="cloud-sync-badge" style="display:none; margin-left:1rem; font-size:0.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,0.2);"></span>
       </div>
       <div class="admin-bar-right">
+        <button id="btn-export-data" title="Ekspor data staf ke file JSON agar bisa diimpor di perangkat lain"
+          style="margin-right: 0.5rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,100,0,0.3); padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
+          <i class="fa-solid fa-download"></i> Ekspor Data
+        </button>
+        <label id="btn-import-data" title="Impor file JSON data staf dari ekspor sebelumnya"
+          style="margin-right: 0.7rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,100,0.3); padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
+          <i class="fa-solid fa-upload"></i> Impor Data
+          <input type="file" id="import-data-file" accept=".json" style="display:none;">
+        </label>
         <button id="btn-open-inbox" class="btn btn-outline-white btn-sm"
           style="margin-right: 1rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,0,0.1); position: relative;">
           <i class="fa-solid fa-envelope"></i> Kotak Masuk Konsultasi
