@@ -2421,54 +2421,92 @@ img {
 
 @media (max-width: 768px) {
 
-  /* Hero Section Mobile */
+  /* === SECTION SPACING - lebih kompak di HP === */
+  .section {
+    padding: 2rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    line-height: 1.3;
+  }
+
+  .section-description {
+    font-size: 0.875rem;
+    margin-top: 0.4rem;
+  }
+
+  .section-tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* === HERO - ringkas, kurangi tinggi === */
   .hero-section {
-    padding: 7rem 0 3rem;
+    padding: 5.5rem 0 2rem;
   }
 
   .hero-title {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     letter-spacing: -0.5px;
   }
 
   .hero-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.875rem;
+    margin: 0.5rem 0 1rem;
   }
 
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: 0.5rem;
+    margin-top: 1rem;
   }
 
   .stat-card {
-    gap: 0.5rem;
+    gap: 0.3rem;
+    padding: 0.6rem 0.5rem;
+  }
+
+  .stat-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
   }
 
   .stat-number {
-    font-size: 1.15rem;
+    font-size: 1rem;
   }
 
   .stat-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 
   .hero-cta {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
+    flex-direction: row;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 
   .hero-cta .btn {
-    width: 100%;
+    flex: 1;
+    min-width: 130px;
     justify-content: center;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
   }
 
   .hero-image-card {
     border-radius: var(--radius-md);
+    margin-top: 1.25rem;
   }
 
   .hero-img {
-    height: 250px;
+    height: 180px;
   }
 
   .floating-badge {
@@ -2476,28 +2514,29 @@ img {
   }
 
   .badge-pill {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
   }
 
-  /* Sejarah Section Mobile */
+  /* === SEJARAH - timeline kompak === */
   .sejarah-timeline::before {
-    left: 20px;
+    left: 16px;
   }
 
   .timeline-year {
-    width: 42px;
-    height: 42px;
-    font-size: 0.7rem;
+    width: 34px;
+    height: 34px;
+    font-size: 0.6rem;
+    flex-shrink: 0;
   }
 
   .timeline-item {
-    gap: 1.25rem;
-    margin-bottom: 1.75rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
   }
 
   .timeline-card {
-    padding: 1.25rem;
+    padding: 0.875rem;
   }
 
   .timeline-card::before,
@@ -2506,94 +2545,123 @@ img {
   }
 
   .timeline-card-header h3 {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
   }
 
   .timeline-card-header i {
-    width: 36px;
-    height: 36px;
-    font-size: 1.15rem;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
   }
 
   .timeline-highlight-box {
-    padding: 1rem;
+    padding: 0.75rem;
   }
 
   .highlight-value {
-    font-size: 0.85rem;
-  }
-
-  /* Layanan Grid Mobile */
-  .layanan-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-
-  .layanan-card {
-    padding: 1.25rem;
-  }
-
-  .layanan-card h3 {
-    font-size: 1.15rem;
-  }
-
-  /* Biaya Section Mobile */
-  .biaya-wrapper {
-    gap: 2rem;
-  }
-
-  .calc-card {
-    padding: 1.5rem;
-  }
-
-  .radio-tiles {
-    flex-direction: column;
-  }
-
-  .result-price {
-    font-size: 1.75rem;
-  }
-
-  /* Syarat Section Mobile */
-  .tab-buttons {
-    gap: 0.5rem;
-  }
-
-  .tab-btn {
-    padding: 0.6rem 1rem;
     font-size: 0.8rem;
   }
 
+  /* === LAYANAN - 2 kolom di HP === */
+  .layanan-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .layanan-card {
+    padding: 0.875rem;
+  }
+
+  .layanan-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .layanan-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .layanan-card p {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  /* === BIAYA - kompak === */
+  .biaya-wrapper {
+    gap: 1.25rem;
+  }
+
+  .calc-card {
+    padding: 1rem;
+  }
+
+  .radio-tiles {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .radio-tile {
+    flex: 1;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .result-price {
+    font-size: 1.5rem;
+  }
+
+  /* === SYARAT - kompak === */
+  .tab-buttons {
+    gap: 0.4rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
   .syarat-card {
-    padding: 1.25rem;
+    padding: 0.875rem;
   }
 
   .step-flow {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.3rem;
   }
 
   .step-arrow {
     transform: rotate(90deg);
-    margin: 0.25rem 0;
+    margin: 0.15rem 0;
   }
 
   .step-item {
     min-width: unset;
     width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8rem;
   }
 
   .grid-2,
   .grid-3 {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
   }
 
-  /* Pegawai Section Mobile */
+  /* === PEGAWAI - 2 kolom di HP === */
   .pegawai-toolbar {
     flex-direction: column;
     align-items: stretch;
-    padding: 1rem;
-    gap: 0.75rem;
+    padding: 0.75rem;
+    gap: 0.5rem;
   }
 
   .search-box {
@@ -2611,60 +2679,77 @@ img {
   .p-filter-btn {
     white-space: nowrap;
     flex-shrink: 0;
-    font-size: 0.8rem;
-    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
   }
 
   .pegawai-grid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
   .pegawai-card {
-    padding: 1.25rem;
+    padding: 0.875rem;
   }
 
-  /* Kontak Section Mobile */
+  .pegawai-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .pegawai-name {
+    font-size: 0.9rem;
+  }
+
+  .pegawai-role-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .pegawai-info-item {
+    font-size: 0.75rem;
+  }
+
+  /* === KONTAK === */
   .kontak-info {
-    text-align: center;
-  }
-
-  .kontak-info .section-tag,
-  .kontak-info .section-title,
-  .kontak-info .section-description {
     text-align: left;
   }
 
   .info-card {
-    padding: 1rem;
+    padding: 0.875rem;
   }
 
   .form-card {
-    padding: 1.5rem;
+    padding: 1rem;
   }
 
-  /* Footer Mobile */
+  /* === FOOTER - kompak === */
   .footer {
-    padding: 3rem 0 1.5rem;
+    padding: 2rem 0 1rem;
   }
 
   .footer-container {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .footer-col.main-col {
+    grid-column: 1 / -1;
   }
 
   .footer-text {
     max-width: 100%;
+    font-size: 0.8rem;
   }
 
-  /* Modal Mobile */
+  /* === MODAL === */
   .modal-backdrop {
-    padding: 0.75rem;
+    padding: 0.5rem;
     align-items: flex-end;
   }
 
   .modal-dialog {
-    max-height: 85vh;
+    max-height: 90vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
@@ -2673,20 +2758,21 @@ img {
   }
 
   .modal-header {
-    padding: 1.25rem 1.25rem 0.75rem;
+    padding: 1rem 1rem 0.5rem;
   }
 
   .modal-header h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .modal-body {
-    padding: 1.25rem;
+    padding: 1rem;
   }
 
   .modal-footer {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    padding: 0.75rem 1rem;
   }
 
   .modal-footer .btn {
@@ -2701,66 +2787,67 @@ img {
   .pegawai-detail-header {
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .pegawai-detail-avatar {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
   }
 
   .pegawai-detail-meta h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .pegawai-detail-grid {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
-  /* Admin Bar Mobile */
+  /* === ADMIN BAR === */
   .admin-bar {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .admin-bar-container {
     flex-direction: column;
     text-align: center;
-    padding: 0.5rem 0;
-    gap: 0.5rem;
+    padding: 0.4rem 0;
+    gap: 0.4rem;
   }
 
   .admin-bar-left {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   .admin-bar-right {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 
-  /* Toast Mobile */
+  /* === TOAST === */
   .toast-container {
-    bottom: 1rem;
-    right: 1rem;
-    left: 1rem;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    left: 0.75rem;
   }
 
   .toast {
     min-width: unset;
     width: 100%;
-    font-size: 0.825rem;
+    font-size: 0.8rem;
+    padding: 0.6rem 0.875rem;
   }
 
-  /* Chatbot Mobile */
+  /* === CHATBOT === */
   .chatbot-fab {
-    bottom: 1.25rem;
-    right: 1.25rem;
-    width: 54px;
-    height: 54px;
-    font-size: 1.3rem;
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
   }
 
   .chatbot-window {
@@ -2770,121 +2857,173 @@ img {
     left: 0;
     width: 100%;
     max-height: 85vh;
-    border-radius: 20px 20px 0 0;
+    border-radius: 16px 16px 0 0;
   }
 
   .chatbot-messages {
-    min-height: 250px;
-    max-height: 45vh;
+    min-height: 200px;
+    max-height: 42vh;
   }
 
   .chatbot-suggestions {
     overflow-x: auto;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
-    padding: 0.5rem 0.75rem 0.25rem;
+    padding: 0.4rem 0.6rem 0.2rem;
   }
 
   .chatbot-suggestion-chip {
     flex-shrink: 0;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
   }
 
-  /* Section spacing Mobile */
-  .section {
-    padding: 3rem 0;
-  }
-
-  .section-header {
-    margin-bottom: 2rem;
-  }
-
-  .section-title {
-    font-size: 1.55rem;
-  }
-
-  .section-description {
-    font-size: 0.95rem;
-  }
-
-  /* Brand logo Mobile */
+  /* === BRAND LOGO === */
   .logo-text {
     overflow: hidden;
   }
 
   .brand-name {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     white-space: normal;
   }
 
   .brand-sub {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     white-space: normal;
     letter-spacing: 0.5px;
   }
 
   .logo-icon {
-    width: 38px;
-    height: 38px;
-    font-size: 1.1rem;
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
     flex-shrink: 0;
   }
 
-  /* Login Modal Mobile */
+  /* === LOGIN MODAL === */
   .modal-login {
     max-width: 100%;
   }
 
   .login-header {
-    padding: 1.5rem 1.25rem 0.75rem;
+    padding: 1.25rem 1rem 0.6rem;
   }
 
   .login-header h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .login-logo {
-    width: 50px;
-    height: 50px;
-    font-size: 1.25rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
   }
 
   .brand-sub {
     display: none;
   }
 
+  .hero-section {
+    padding: 5rem 0 1.5rem;
+  }
+
   .hero-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.82rem;
   }
 
   .hero-stats {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .stat-card {
+    padding: 0.5rem 0.4rem;
   }
 
   .stat-icon {
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
+    font-size: 0.78rem;
+  }
+
+  .stat-number {
     font-size: 0.9rem;
   }
 
   .btn-lg {
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
   }
 
+  /* Layanan 2 kolom tetap di 480px */
+  .layanan-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .layanan-card {
+    padding: 0.7rem;
+  }
+
+  .layanan-card h3 {
+    font-size: 0.82rem;
+  }
+
+  .layanan-card p {
+    font-size: 0.72rem;
+  }
+
+  /* Pegawai 2 kolom tetap di 480px */
   .pegawai-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .pegawai-card {
+    padding: 0.7rem;
+  }
+
+  .pegawai-avatar {
+    width: 52px;
+    height: 52px;
+  }
+
+  .pegawai-name {
+    font-size: 0.82rem;
+  }
+
+  /* Footer 2 kolom */
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .footer-col.main-col {
+    grid-column: 1 / -1;
+  }
+
+  .section {
+    padding: 1.5rem 0;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
   }
 
   .chatbot-bubble {
-    max-width: 90%;
-    font-size: 0.8rem;
+    max-width: 92%;
+    font-size: 0.78rem;
   }
 }
 
