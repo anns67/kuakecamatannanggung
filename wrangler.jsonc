@@ -1,7 +1,13 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "website-kua",
   "compatibility_date": "2026-09-04",
-  "assets": {
-    "directory": "./dist"
-  }
+  "pages_build_output_dir": "./dist",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kua-db",
+      "database_id": "kua-db"
+    }
+  ]
 }

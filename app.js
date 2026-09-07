@@ -284,38 +284,136 @@ const DEFAULT_KUA_KONSULTASI = [
   }
 ];
 
-// --- CLOUD SYNC CONFIG (JSONBin.io) ---
-// Data pegawai tersimpan di cloud agar sinkron di semua perangkat
-const CLOUD_SYNC = {
-  // Bin ID dan API Key JSONBin.io - dibuat otomatis saat pertama kali sync
-  binId: localStorage.getItem("kua_jsonbin_id") || null,
-  apiKey: "$2a$10$KUA_PLACEHOLDER_KEY", // Akan diganti setelah setup JSONBin
-  baseUrl: "https://api.jsonbin.io/v3",
-  enabled: false // Akan true setelah binId tersedia
+// --- CLOUDFLARE D1 (SQLITE) REST API SERVICE ---
+const D1_API = {
+  connected: false,
+
+  async init() {
+    try {
+      const res = await fetch("/api/init");
+      if (res.ok) {
+        const json = await res.json();
+        this.connected = Boolean(json.d1_connected);
+        return this.connected;
+      }
+    } catch (e) {
+      this.connected = false;
+    }
+    return false;
+  },
+
+  async getPegawai() {
+    try {
+      const res = await fetch("/api/pegawai");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          this.connected = true;
+          return json.data;
+        }
+      }
+    } catch (e) {
+      console.warn("[D1 SQLite] Gagal membaca data pegawai dari D1, menggunakan cache lokal.", e);
+    }
+    return null;
+  },
+
+  async savePegawai(data) {
+    try {
+      const res = await fetch("/api/pegawai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        this.connected = Boolean(json.success);
+        return Boolean(json.success);
+      }
+    } catch (e) {
+      console.warn("[D1 SQLite] Gagal menyimpan ke D1:", e);
+    }
+    return false;
+  },
+
+  async deletePegawai(id) {
+    try {
+      const res = await fetch(`/api/pegawai?id=${encodeURIComponent(id)}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return Boolean(json.success);
+      }
+    } catch (e) {
+      console.warn("[D1 SQLite] Gagal menghapus pegawai dari D1:", e);
+    }
+    return false;
+  },
+
+  async getKonsultasi() {
+    try {
+      const res = await fetch("/api/konsultasi");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          this.connected = true;
+          return json.data;
+        }
+      }
+    } catch (e) {}
+    return null;
+  },
+
+  async saveKonsultasi(data) {
+    try {
+      const res = await fetch("/api/konsultasi", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return Boolean(json.success);
+      }
+    } catch (e) {}
+    return false;
+  },
+
+  async deleteKonsultasi(id) {
+    try {
+      const res = await fetch(`/api/konsultasi?id=${encodeURIComponent(id)}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        const json = await res.json();
+        return Boolean(json.success);
+      }
+    } catch (e) {}
+    return false;
+  },
+
+  async getSetting(key) {
+    try {
+      const res = await fetch(`/api/settings?key=${encodeURIComponent(key)}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.value) return json.value;
+      }
+    } catch (e) {}
+    return null;
+  },
+
+  async saveSetting(key, value) {
+    try {
+      await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key, value })
+      });
+    } catch (e) {}
+  }
 };
-
-async function cloudPush(data) {
-  if (!CLOUD_SYNC.enabled || !CLOUD_SYNC.binId) return false;
-  try {
-    const res = await fetch(`${CLOUD_SYNC.baseUrl}/b/${CLOUD_SYNC.binId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "X-Master-Key": CLOUD_SYNC.apiKey },
-      body: JSON.stringify(data)
-    });
-    return res.ok;
-  } catch (e) { return false; }
-}
-
-async function cloudPull() {
-  if (!CLOUD_SYNC.enabled || !CLOUD_SYNC.binId) return null;
-  try {
-    const res = await fetch(`${CLOUD_SYNC.baseUrl}/b/${CLOUD_SYNC.binId}/latest`, {
-      headers: { "X-Master-Key": CLOUD_SYNC.apiKey, "X-Bin-Meta": "false" }
-    });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return null;
-}
 
 // --- APP STATE MANAGEMENT ---
 class KuaState {
@@ -342,8 +440,9 @@ class KuaState {
     return DEFAULT_KUA_KONSULTASI;
   }
 
-  saveKonsultasiToStorage() {
+  saveKonsultasiToStorage(itemToSync = null) {
     localStorage.setItem("kua_konsultasi_data", JSON.stringify(this.konsultasiList));
+    D1_API.saveKonsultasi(itemToSync || this.konsultasiList);
   }
 
   addKonsultasi(data) {
@@ -356,7 +455,7 @@ class KuaState {
     data.status = "pending";
     data.answer = null;
     this.konsultasiList.unshift(data);
-    this.saveKonsultasiToStorage();
+    this.saveKonsultasiToStorage(data);
   }
 
   answerKonsultasi(id, answerData) {
@@ -364,7 +463,7 @@ class KuaState {
     if (item) {
       item.status = "answered";
       item.answer = answerData;
-      this.saveKonsultasiToStorage();
+      this.saveKonsultasiToStorage(item);
     }
   }
 
@@ -372,13 +471,14 @@ class KuaState {
     const item = this.konsultasiList.find(c => c.id === id);
     if (item) {
       item.status = item.status === "answered" ? "pending" : "answered";
-      this.saveKonsultasiToStorage();
+      this.saveKonsultasiToStorage(item);
     }
   }
 
   deleteKonsultasi(id) {
     this.konsultasiList = this.konsultasiList.filter(c => c.id !== id);
     this.saveKonsultasiToStorage();
+    D1_API.deleteKonsultasi(id);
   }
 
   likeKonsultasi(id) {
@@ -391,7 +491,7 @@ class KuaState {
         item.likes = (item.likes || 0) + 1;
         item.likedByUser = true;
       }
-      this.saveKonsultasiToStorage();
+      this.saveKonsultasiToStorage(item);
     }
   }
 
@@ -402,6 +502,7 @@ class KuaState {
   saveHeroImgToStorage(url) {
     this.heroImgUrl = url;
     localStorage.setItem("kua_hero_img", url);
+    D1_API.saveSetting("hero_img", url);
   }
 
   loadPegawaiFromStorage() {
@@ -417,54 +518,94 @@ class KuaState {
     return DEFAULT_KUA_PEGAWAI;
   }
 
-  savePegawaiToStorage() {
+  savePegawaiToStorage(pegawaiToSync = null) {
+    // 1. Simpan ke local cache untuk fallback offline
     localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
-    // Sinkron ke cloud jika admin sedang login
-    if (this.isAdmin) {
-      this._syncToCloud();
-    }
+
+    // 2. Sinkronkan langsung ke Cloudflare D1 SQLite
+    this.syncPegawaiToD1(pegawaiToSync);
   }
 
-  async _syncToCloud() {
-    const payload = { pegawai: this.pegawaiList, updatedAt: new Date().toISOString() };
-    const ok = await cloudPush(payload);
+  async syncPegawaiToD1(item = null) {
+    const payload = item || this.pegawaiList;
+    const ok = await D1_API.savePegawai(payload);
+    this.updateD1StatusBadge(ok);
+  }
+
+  async deletePegawaiFromD1(id) {
+    const ok = await D1_API.deletePegawai(id);
+    this.updateD1StatusBadge(ok);
+  }
+
+  updateD1StatusBadge(ok = null) {
     const badge = document.getElementById("cloud-sync-badge");
-    if (badge) {
-      badge.textContent = ok ? "✓ Tersimpan ke Cloud" : "⚠ Offline (tersimpan lokal)";
-      badge.style.color = ok ? "#22c55e" : "#f59e0b";
-      badge.style.display = "inline";
-      setTimeout(() => { badge.style.display = "none"; }, 3000);
+    if (!badge) return;
+    badge.style.display = "inline";
+    if (ok === true || (ok === null && D1_API.connected)) {
+      badge.textContent = "🗄 D1 SQLite: Terhubung";
+      badge.style.color = "#22c55e";
+      badge.style.background = "rgba(34, 197, 94, 0.2)";
+    } else {
+      badge.textContent = "🗄 D1 SQLite: Cache Lokal";
+      badge.style.color = "#f59e0b";
+      badge.style.background = "rgba(245, 158, 11, 0.2)";
     }
   }
 
-  async loadFromCloud() {
-    const data = await cloudPull();
-    if (data && data.pegawai && Array.isArray(data.pegawai) && data.pegawai.length > 0) {
-      this.pegawaiList = data.pegawai;
+  async loadFromD1() {
+    // 1. Coba inisialisasi D1
+    const connected = await D1_API.init();
+    this.updateD1StatusBadge(connected);
+
+    // 2. Ambil data pegawai dari D1 SQLite
+    const d1Pegawai = await D1_API.getPegawai();
+    if (d1Pegawai && d1Pegawai.length > 0) {
+      this.pegawaiList = d1Pegawai;
       localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
-      console.log("[KUA] Data pegawai diperbarui dari cloud:", data.updatedAt);
-      return true;
+      console.log("[KUA] Data pegawai dimuat dari Cloudflare D1 SQLite (" + d1Pegawai.length + " staf)");
+      renderPegawaiGrid();
+    } else if (connected) {
+      // Jika D1 terhubung tapi tabel kosong, simpan data default ke D1
+      await D1_API.savePegawai(this.pegawaiList);
     }
-    return false;
+
+    // 3. Ambil data konsultasi dari D1 SQLite
+    const d1Konsultasi = await D1_API.getKonsultasi();
+    if (d1Konsultasi && d1Konsultasi.length > 0) {
+      this.konsultasiList = d1Konsultasi;
+      localStorage.setItem("kua_konsultasi_data", JSON.stringify(this.konsultasiList));
+      console.log("[KUA] Data konsultasi dimuat dari Cloudflare D1 SQLite (" + d1Konsultasi.length + " pesan)");
+      renderForumFeed();
+      updateAdminInboxBadge();
+    }
+
+    // 4. Ambil setting hero image dari D1 SQLite
+    const d1Hero = await D1_API.getSetting("hero_img");
+    if (d1Hero) {
+      this.heroImgUrl = d1Hero;
+      localStorage.setItem("kua_hero_img", d1Hero);
+      initHeroImg();
+    }
   }
 
   addPegawai(pegawai) {
     pegawai.id = "kua-" + Date.now();
     this.pegawaiList.push(pegawai);
-    this.savePegawaiToStorage();
+    this.savePegawaiToStorage(pegawai);
   }
 
   updatePegawai(id, updatedData) {
     const index = this.pegawaiList.findIndex(p => p.id === id);
     if (index !== -1) {
       this.pegawaiList[index] = { ...this.pegawaiList[index], ...updatedData };
-      this.savePegawaiToStorage();
+      this.savePegawaiToStorage(this.pegawaiList[index]);
     }
   }
 
   deletePegawai(id) {
     this.pegawaiList = this.pegawaiList.filter(p => p.id !== id);
-    this.savePegawaiToStorage();
+    localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
+    this.deletePegawaiFromD1(id);
   }
 
   getFilteredPegawai() {
@@ -502,18 +643,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   initBiayaCalculator();
   initSyaratTabs();
 
-  // Coba ambil data terbaru dari cloud (agar HP & desktop sinkron)
-  if (CLOUD_SYNC.enabled) {
-    const updated = await state.loadFromCloud();
-    if (updated) renderPegawaiGrid();
-    else renderPegawaiGrid();
-  } else {
-    renderPegawaiGrid();
-  }
-
+  // 1. Render data awal dari cache lokal agar tampil instan tanpa lag
+  renderPegawaiGrid();
   initForum();
   initEventListeners();
   updateAdminInboxBadge();
+
+  // 2. Sinkronkan dengan Cloudflare D1 (SQLite) di server
+  state.loadFromD1();
 });
 
 // --- NAVBAR SCROLL & MOBILE MENU ---
@@ -1180,6 +1317,7 @@ function initEventListeners() {
     renderPegawaiGrid();
     renderForumFeed();
     updateAdminInboxBadge();
+    state.updateD1StatusBadge();
   }
 
   const loginForm = document.getElementById("login-form");
