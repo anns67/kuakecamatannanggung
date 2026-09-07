@@ -965,6 +965,7 @@ function initHeroImg() {
 }
 
 let currentEditAvatarId = null;
+let pendingAvatarBase64 = null; // Menyimpan sementara base64 foto yang dipilih dari file picker
 
 window.promptEditHeroImg = function () {
   document.getElementById("upload-hero").click();
@@ -1088,6 +1089,7 @@ window.openAddPegawaiModal = function () {
   if (preview) preview.src = "foto/baday.jpg";
   const fileInput = document.getElementById("form-avatar-file");
   if (fileInput) fileInput.value = "";
+  pendingAvatarBase64 = null; // Reset foto yang tertunda
   openModal("modal-pegawai-form");
 };
 
@@ -1106,11 +1108,13 @@ window.openEditPegawaiModal = function (id) {
   document.getElementById("form-hp").value = p.hp;
 
   const avatarInput = document.getElementById("form-avatar");
-  if (avatarInput) avatarInput.value = p.avatar || "";
+  // Jika avatar adalah base64, jangan tampilkan di text input (terlalu panjang)
+  if (avatarInput) avatarInput.value = (p.avatar && p.avatar.startsWith('data:')) ? '' : (p.avatar || '');
   const preview = document.getElementById("form-avatar-preview");
   if (preview) preview.src = p.avatar || "foto/baday.jpg";
   const fileInput = document.getElementById("form-avatar-file");
   if (fileInput) fileInput.value = "";
+  pendingAvatarBase64 = null; // Reset foto yang tertunda
 
   openModal("modal-pegawai-form");
 };
@@ -1240,11 +1244,15 @@ function initEventListeners() {
         showToast("Memproses dan mengompres foto...", "info");
         try {
           const compressed = await compressImage(file, 400, 400, 0.82);
-          const avatarInput = document.getElementById("form-avatar");
-          if (avatarInput) avatarInput.value = compressed;
+          // SIMPAN ke variabel JS (BUKAN ke input text — base64 terlalu panjang untuk input.value)
+          pendingAvatarBase64 = compressed;
+          // Tampilkan preview
           const preview = document.getElementById("form-avatar-preview");
           if (preview) preview.src = compressed;
-          showToast("Foto siap disimpan!", "success");
+          // Kosongkan field teks URL karena sudah ada file baru
+          const avatarInput = document.getElementById("form-avatar");
+          if (avatarInput) avatarInput.value = "";
+          showToast("✅ Foto dipilih! Klik Simpan untuk menyimpan perubahan.", "success");
         } catch (err) {
           showToast("Gagal memproses foto: " + err.message, "error");
         }
@@ -1350,12 +1358,12 @@ function initEventListeners() {
       const jabatan = document.getElementById("form-jabatan").value;
       const wilayah = document.getElementById("form-wilayah").value;
       const bio = document.getElementById("form-bio").value;
-
       const hp = document.getElementById("form-hp").value;
 
       const existing = id ? state.pegawaiList.find(p => p.id === id) : null;
-      const avatarInputVal = document.getElementById("form-avatar")?.value.trim();
-      const avatar = avatarInputVal || existing?.avatar || "foto/baday.jpg";
+      // PRIORITAS: 1) file yang baru dipilih (base64 di JS var), 2) URL manual di text input, 3) avatar lama
+      const avatarTextVal = document.getElementById("form-avatar")?.value.trim();
+      const avatar = pendingAvatarBase64 || avatarTextVal || existing?.avatar || "foto/baday.jpg";
       const keahlian = existing?.keahlian || [];
 
       const pegawaiData = {
@@ -1372,12 +1380,13 @@ function initEventListeners() {
 
       if (id) {
         state.updatePegawai(id, pegawaiData);
-        showToast(`Profil pegawai "${nama}" berhasil diperbarui!`, "success");
+        showToast(`✅ Profil pegawai "${nama}" berhasil diperbarui!`, "success");
       } else {
         state.addPegawai(pegawaiData);
-        showToast(`Pegawai baru "${nama}" berhasil ditambahkan!`, "success");
+        showToast(`✅ Pegawai baru "${nama}" berhasil ditambahkan!`, "success");
       }
 
+      pendingAvatarBase64 = null; // Reset setelah disimpan
       renderPegawaiGrid();
       closeModal("modal-pegawai-form");
     });
