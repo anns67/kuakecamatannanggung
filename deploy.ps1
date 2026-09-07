@@ -39,6 +39,12 @@ if (Test-Path "foto") {
     Write-Host "   OK Copied: foto/ folder" -ForegroundColor Green
 }
 
+# Copy functions/ folder (Cloudflare Pages Functions / API endpoints)
+if (Test-Path "functions") {
+    Copy-Item "functions" "dist\functions" -Recurse -Force
+    Write-Host "   OK Copied: functions/ folder (API endpoints)" -ForegroundColor Green
+}
+
 Write-Host ""
 
 # ---- STEP 2: Git Add ----
