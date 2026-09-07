@@ -411,7 +411,40 @@ const D1_API = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ key, value })
       });
+      return true;
     } catch (e) {}
+    return false;
+  },
+
+  // Simpan foto (base64) pegawai ke D1 settings, terpisah dari tabel pegawai
+  async saveAvatar(pegawaiId, base64Data) {
+    return this.saveSetting(`foto_${pegawaiId}`, base64Data);
+  },
+
+  // Ambil semua foto pegawai dari D1 settings sekaligus, termasuk hero_img
+  async getAllAvatars() {
+    try {
+      const res = await fetch("/api/settings");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          // Build avatarMap: key = pegawai_id, value = base64
+          const avatarMap = {};
+          Object.entries(json.data).forEach(([key, val]) => {
+            if (key.startsWith('foto_') && val) {
+              const id = key.replace('foto_', '');
+              avatarMap[id] = val;
+            }
+          });
+          // Tambahkan hero_img langsung ke map dengan key 'hero_img'
+          if (json.data['hero_img']) {
+            avatarMap['hero_img'] = json.data['hero_img'];
+          }
+          return avatarMap;
+        }
+      }
+    } catch (e) {}
+    return {};
   }
 };
 
@@ -537,9 +570,30 @@ class KuaState {
   }
 
   async syncPegawaiToD1(item = null) {
-    const payload = item || this.pegawaiList;
-    const ok = await D1_API.savePegawai(payload);
-    this.updateD1StatusBadge(ok);
+    // Pisahkan foto base64 dari data pegawai agar tidak melebihi batas D1 row size
+    const extractAndSavePhotos = async (pegawai) => {
+      if (pegawai.avatar && pegawai.avatar.startsWith('data:')) {
+        // Simpan foto ke D1 settings table, terpisah
+        D1_API.saveAvatar(pegawai.id, pegawai.avatar);
+        // Kirim ke D1 pegawai table tanpa base64 (gunakan path file sebagai placeholder)
+        return { ...pegawai, avatar: `foto/${pegawai.id}.jpg` };
+      }
+      return pegawai;
+    };
+
+    if (Array.isArray(item)) {
+      const cleanList = await Promise.all(item.map(extractAndSavePhotos));
+      const ok = await D1_API.savePegawai(cleanList);
+      this.updateD1StatusBadge(ok);
+    } else if (item) {
+      const clean = await extractAndSavePhotos(item);
+      const ok = await D1_API.savePegawai(clean);
+      this.updateD1StatusBadge(ok);
+    } else {
+      const cleanList = await Promise.all(this.pegawaiList.map(extractAndSavePhotos));
+      const ok = await D1_API.savePegawai(cleanList);
+      this.updateD1StatusBadge(ok);
+    }
   }
 
   async deletePegawaiFromD1(id) {
@@ -567,33 +621,50 @@ class KuaState {
     const connected = await D1_API.init();
     this.updateD1StatusBadge(connected);
 
-    // 2. Ambil data pegawai dari D1 SQLite
+    if (!connected) return;
+
+    // 2. Ambil semua foto avatar dari D1 settings (termasuk foto yang di-upload admin)
+    const avatarMap = await D1_API.getAllAvatars();
+
+    // 3. Ambil data pegawai dari D1 SQLite
     const d1Pegawai = await D1_API.getPegawai();
     if (d1Pegawai && d1Pegawai.length > 0) {
-      this.pegawaiList = d1Pegawai;
-      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
+      // Merge foto dari settings ke data pegawai
+      this.pegawaiList = d1Pegawai.map(p => {
+        const customAvatar = avatarMap[p.id];
+        if (customAvatar) {
+          return { ...p, avatar: customAvatar };
+        }
+        return p;
+      });
+      try {
+        localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
+      } catch (e) {}
       console.log("[KUA] Data pegawai dimuat dari Cloudflare D1 SQLite (" + d1Pegawai.length + " staf)");
       renderPegawaiGrid();
-    } else if (connected) {
-      // Jika D1 terhubung tapi tabel kosong, simpan data default ke D1
-      await D1_API.savePegawai(this.pegawaiList);
+    } else {
+      // D1 terhubung tapi tabel kosong, seed data default
+      const pegawaiNoPhoto = this.pegawaiList.map(p => ({ ...p, avatar: (p.avatar && p.avatar.startsWith('data:')) ? 'foto/baday.jpg' : (p.avatar || 'foto/baday.jpg') }));
+      await D1_API.savePegawai(pegawaiNoPhoto);
     }
 
-    // 3. Ambil data konsultasi dari D1 SQLite
+    // 4. Ambil data konsultasi dari D1 SQLite
     const d1Konsultasi = await D1_API.getKonsultasi();
     if (d1Konsultasi && d1Konsultasi.length > 0) {
       this.konsultasiList = d1Konsultasi;
-      localStorage.setItem("kua_konsultasi_data", JSON.stringify(this.konsultasiList));
+      try {
+        localStorage.setItem("kua_konsultasi_data", JSON.stringify(this.konsultasiList));
+      } catch (e) {}
       console.log("[KUA] Data konsultasi dimuat dari Cloudflare D1 SQLite (" + d1Konsultasi.length + " pesan)");
       renderForumFeed();
       updateAdminInboxBadge();
     }
 
-    // 4. Ambil setting hero image dari D1 SQLite
-    const d1Hero = await D1_API.getSetting("hero_img");
+    // 5. Ambil setting hero image dari D1 SQLite
+    const d1Hero = avatarMap['hero_img'] || await D1_API.getSetting("hero_img");
     if (d1Hero) {
       this.heroImgUrl = d1Hero;
-      localStorage.setItem("kua_hero_img", d1Hero);
+      try { localStorage.setItem("kua_hero_img", d1Hero); } catch(e) {}
       initHeroImg();
     }
   }
