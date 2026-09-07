@@ -501,7 +501,11 @@ class KuaState {
 
   saveHeroImgToStorage(url) {
     this.heroImgUrl = url;
-    localStorage.setItem("kua_hero_img", url);
+    try {
+      localStorage.setItem("kua_hero_img", url);
+    } catch (e) {
+      console.warn("[KUA] LocalStorage penuh:", e);
+    }
     D1_API.saveSetting("hero_img", url);
   }
 
@@ -514,13 +518,19 @@ class KuaState {
         console.error("Gagal membaca data dari LocalStorage", e);
       }
     }
-    localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(DEFAULT_KUA_PEGAWAI));
+    try {
+      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(DEFAULT_KUA_PEGAWAI));
+    } catch (e) {}
     return DEFAULT_KUA_PEGAWAI;
   }
 
   savePegawaiToStorage(pegawaiToSync = null) {
-    // 1. Simpan ke local cache untuk fallback offline
-    localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
+    // 1. Simpan ke local cache untuk fallback offline (dengan proteksi quota)
+    try {
+      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
+    } catch (e) {
+      console.warn("[KUA] LocalStorage quota reached, memprioritaskan D1 SQLite server:", e);
+    }
 
     // 2. Sinkronkan langsung ke Cloudflare D1 SQLite
     this.syncPegawaiToD1(pegawaiToSync);
@@ -1001,6 +1011,12 @@ window.openAddPegawaiModal = function () {
   document.getElementById("form-modal-title").innerHTML = `<i class="fa-solid fa-user-plus"></i> Tambah Pegawai KUA Baru`;
   document.getElementById("pegawai-crud-form").reset();
   document.getElementById("form-pegawai-id").value = "";
+  const avatarInput = document.getElementById("form-avatar");
+  if (avatarInput) avatarInput.value = "";
+  const preview = document.getElementById("form-avatar-preview");
+  if (preview) preview.src = "foto/baday.jpg";
+  const fileInput = document.getElementById("form-avatar-file");
+  if (fileInput) fileInput.value = "";
   openModal("modal-pegawai-form");
 };
 
@@ -1016,8 +1032,14 @@ window.openEditPegawaiModal = function (id) {
   document.getElementById("form-jabatan").value = p.jabatan;
   document.getElementById("form-wilayah").value = p.wilayah;
   document.getElementById("form-bio").value = p.bio;
-
   document.getElementById("form-hp").value = p.hp;
+
+  const avatarInput = document.getElementById("form-avatar");
+  if (avatarInput) avatarInput.value = p.avatar || "";
+  const preview = document.getElementById("form-avatar-preview");
+  if (preview) preview.src = p.avatar || "foto/baday.jpg";
+  const fileInput = document.getElementById("form-avatar-file");
+  if (fileInput) fileInput.value = "";
 
   openModal("modal-pegawai-form");
 };
@@ -1051,20 +1073,68 @@ function showToast(message, type = "success") {
   }, 3500);
 }
 
+// --- CLIENT-SIDE IMAGE COMPRESSION (CANVAS) ---
+// Mengompres foto dari HP/kamera (3MB-10MB) menjadi sangat ringan (~20KB-40KB)
+// sehingga tidak akan melebihi kuota LocalStorage dan cepat tersimpan ke Cloudflare D1
+function compressImage(file, maxWidth = 500, maxHeight = 500, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) {
+      return reject(new Error("File yang dipilih bukan gambar yang valid."));
+    }
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Gagal membaca file foto."));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Format foto tidak dapat diproses browser."));
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // --- EVENT LISTENERS ---
 function initEventListeners() {
   const uploadHero = document.getElementById("upload-hero");
   if (uploadHero) {
-    uploadHero.addEventListener("change", (e) => {
+    uploadHero.addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          state.saveHeroImgToStorage(ev.target.result);
+        showToast("Sedang memproses dan mengompres foto hero...", "info");
+        try {
+          const compressed = await compressImage(file, 1200, 675, 0.80);
+          state.saveHeroImgToStorage(compressed);
           initHeroImg();
-          showToast("Foto hero berhasil diperbarui dari file lokal!", "success");
-        };
-        reader.readAsDataURL(file);
+          showToast("Foto hero berhasil diperbarui!", "success");
+        } catch (err) {
+          showToast("Gagal memproses foto: " + err.message, "error");
+        }
       }
       uploadHero.value = "";
     });
@@ -1072,19 +1142,54 @@ function initEventListeners() {
 
   const uploadAvatar = document.getElementById("upload-avatar");
   if (uploadAvatar) {
-    uploadAvatar.addEventListener("change", (e) => {
+    uploadAvatar.addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (file && currentEditAvatarId) {
         const p = state.pegawaiList.find(item => item.id === currentEditAvatarId);
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          state.updatePegawai(currentEditAvatarId, { avatar: ev.target.result });
+        showToast(`Mengompres foto profil ${p?.nama}...`, "info");
+        try {
+          const compressed = await compressImage(file, 400, 400, 0.82);
+          state.updatePegawai(currentEditAvatarId, { avatar: compressed });
           renderPegawaiGrid();
-          showToast(`Foto profil ${p?.nama} berhasil diperbarui dari file lokal!`, "success");
-        };
-        reader.readAsDataURL(file);
+          showToast(`Foto profil ${p?.nama} berhasil diperbarui!`, "success");
+        } catch (err) {
+          showToast("Gagal memproses foto: " + err.message, "error");
+        }
       }
       uploadAvatar.value = "";
+    });
+  }
+
+  // Handle upload foto di dalam modal form pegawai
+  const formAvatarFile = document.getElementById("form-avatar-file");
+  if (formAvatarFile) {
+    formAvatarFile.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        showToast("Memproses dan mengompres foto...", "info");
+        try {
+          const compressed = await compressImage(file, 400, 400, 0.82);
+          const avatarInput = document.getElementById("form-avatar");
+          if (avatarInput) avatarInput.value = compressed;
+          const preview = document.getElementById("form-avatar-preview");
+          if (preview) preview.src = compressed;
+          showToast("Foto siap disimpan!", "success");
+        } catch (err) {
+          showToast("Gagal memproses foto: " + err.message, "error");
+        }
+      }
+    });
+  }
+
+  // Handle ketik / paste URL foto di form
+  const formAvatarText = document.getElementById("form-avatar");
+  if (formAvatarText) {
+    formAvatarText.addEventListener("input", (e) => {
+      const val = e.target.value.trim();
+      const preview = document.getElementById("form-avatar-preview");
+      if (preview && val) {
+        preview.src = val;
+      }
     });
   }
 
@@ -1178,7 +1283,8 @@ function initEventListeners() {
       const hp = document.getElementById("form-hp").value;
 
       const existing = id ? state.pegawaiList.find(p => p.id === id) : null;
-      const avatar = existing?.avatar || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80";
+      const avatarInputVal = document.getElementById("form-avatar")?.value.trim();
+      const avatar = avatarInputVal || existing?.avatar || "foto/baday.jpg";
       const keahlian = existing?.keahlian || [];
 
       const pegawaiData = {
@@ -1190,7 +1296,6 @@ function initEventListeners() {
         wilayah,
         bio,
         keahlian,
-
         hp
       };
 

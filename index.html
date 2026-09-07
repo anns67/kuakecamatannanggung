@@ -20,7 +20,7 @@
     crossorigin="anonymous">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=6">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 
 <body>
@@ -1025,6 +1025,20 @@
           </div>
 
           <div class="form-group">
+            <label for="form-avatar">Foto Profil Pegawai</label>
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem;">
+              <img id="form-avatar-preview" src="foto/baday.jpg" alt="Preview Foto"
+                style="width: 58px; height: 58px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--kua-primary); flex-shrink: 0;">
+              <div style="flex: 1;">
+                <input type="file" id="form-avatar-file" accept="image/*" class="form-control"
+                  style="padding: 0.35rem 0.6rem; font-size: 0.8rem;">
+                <small style="color: var(--kua-text-muted); font-size: 0.75rem;">Pilih foto dari galeri HP / file laptop (otomatis dikompres)</small>
+              </div>
+            </div>
+            <input type="text" id="form-avatar" class="form-control" placeholder="Atau ketik link/path foto, misal: foto/baday.jpg">
+          </div>
+
+          <div class="form-group">
             <label for="form-wilayah">Wilayah Binaan / Tugas <span class="required">*</span></label>
             <input type="text" id="form-wilayah" class="form-control"
               placeholder="Contoh: Kelurahan Sukamaju & Sukadamai" required>
@@ -1239,7 +1253,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 
 </html>
