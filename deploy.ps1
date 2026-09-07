@@ -38,12 +38,9 @@ if (Test-Path "foto") {
     Copy-Item "foto" "dist\foto" -Recurse -Force
     Write-Host "   OK Copied: foto/ folder" -ForegroundColor Green
 }
+# CATATAN: functions/ TIDAK perlu di-copy ke dist/
+# Cloudflare Pages otomatis membaca functions/ dari root repository
 
-# Copy functions/ folder (Cloudflare Pages Functions / API endpoints)
-if (Test-Path "functions") {
-    Copy-Item "functions" "dist\functions" -Recurse -Force
-    Write-Host "   OK Copied: functions/ folder (API endpoints)" -ForegroundColor Green
-}
 
 Write-Host ""
 
