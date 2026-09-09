@@ -11,7 +11,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19750812 200212 1 003",
     jabatan: "Kepala KUA Kecamatan Nanggung",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/baday.jpg",
+    avatar: "foto/pak badai.png",
     bio: "Memimpin pelayanan KUA dengan prinsip integritas, pelayanan cepat bebas pungli, dan pembinaan keluarga sakinah mawaddah wa rahmah di wilayah kecamatan.",
     keahlian: ["Hukum Munakahat", "Manajemen Pelayanan Publik", "Penasihat BP4", "Kepemimpinan Syariah"],
     email: "baday@kemenag.go.id",
@@ -24,7 +24,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "196910131992031002",
     jabatan: "Wakil Kepala KUA",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/acep.jpg",
+    avatar: "foto/pak acep.png",
     bio: "Mendampingi Kepala KUA dalam tugas-tugas administratif, pelayanan keagamaan, serta pengawasan lintas program KUA.",
     keahlian: ["Pemeriksaan Berkas N1-N4", "Legalitas Akta Nikah", "Konseling Suscatin"],
     email: "acep@kemenag.go.id",
@@ -37,7 +37,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "200102022025051006",
     jabatan: "Penghulu Ahli Pertama",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/fadhil.jpg",
+    avatar: "foto/pak fadil.png",
     bio: "Penghulu KUA yang aktif melayani pemeriksaan nikah, bimbingan calon pengantin (Bimwin), dan pelayanan akad nikah.",
     keahlian: ["Fiqih Munakahat", "Akta Nikah SIMKAH", "Bimbingan Calon Pengantin"],
     email: "ahmad.fadhil@kemenag.go.id",
@@ -50,7 +50,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "198603112023211015",
     jabatan: "Penyuluh Agama Islam",
     wilayah: "Kecamatan Nanggung",
-    avatar: "foto/ating.jpg",
+    avatar: "foto/bu tia.png",
     bio: "Penyuluh fungsional yang aktif memberikan pembinaan majelis taklim, khutbah Jumat, dan bimbingan keagamaan masyarakat.",
     keahlian: ["Pembinaan Majelis Taklim", "Bimbingan Syariah", "Konseling Rohani"],
     email: "ating@kemenag.go.id",
@@ -63,7 +63,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "198701112025211011",
     jabatan: "Penyuluh Agama Islam",
     wilayah: "Kecamatan Nanggung",
-    avatar: "foto/dede.png",
+    avatar: "foto/pak maman.png",
     bio: "Penyuluh yang membina program pengajian rutin, konsultasi keluarga sakinah, dan pembinaan generasi muda Islam.",
     keahlian: ["Konseling Keluarga", "Pembinaan Rohani", "Bimbingan BP4"],
     email: "dede@kemenag.go.id",
@@ -76,7 +76,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "198902042023211023",
     jabatan: "Penyuluh Agama Islam",
     wilayah: "Kecamatan Nanggung",
-    avatar: "foto/razmi.jpg",
+    avatar: "foto/pak jajang.png",
     bio: "Penyuluh Agama Islam yang fokus pada bimbingan perkawinan pra-nikah dan penyuluhan hukum keluarga Islam.",
     keahlian: ["Hukum Keluarga Islam", "Bimwin Pranikah", "Penyuluhan BP4"],
     email: "razmi@kemenag.go.id",
@@ -89,7 +89,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "197806152025212011",
     jabatan: "Penyuluh Agama Islam",
     wilayah: "Kecamatan Nanggung",
-    avatar: "foto/neny.jpg",
+    avatar: "foto/pak sapri.png",
     bio: "Penyuluh spesialis pembinaan majelis taklim kaum ibu, pencegahan stunting calon pengantin, dan ketahanan keluarga sakinah.",
     keahlian: ["Majelis Taklim Ibu-Ibu", "Pencegahan Stunting", "Konseling Sakinah"],
     email: "neny@kemenag.go.id",
@@ -102,7 +102,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19920418 201802 2 004",
     jabatan: "Staf Administrasi & Operator SIMKAH",
     wilayah: "Front Office Pelayanan KUA",
-    avatar: "foto/kiki.jpg",
+    avatar: "foto/pak herman.png",
     bio: "Petugas staf administrasi front office yang melayani verifikasi pendaftaran SIMKAH online, validasi dokumen, dan pencetakan Buku Nikah.",
     keahlian: ["Operator SIMKAH Web 4.0", "Pelayanan Front Office", "Pengarsipan Akta Nikah"],
     email: "kiki@kemenag.go.id",
@@ -115,7 +115,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19940712 202012 2 008",
     jabatan: "Staf Pelayanan & Umum",
     wilayah: "Front Office KUA",
-    avatar: "foto/tia.jpg",
+    avatar: "foto/bu neny.png",
     bio: "Melayani legalisasi buku nikah, surat rekomendasi nikah luar daerah, dan pelayanan informasi umum publik.",
     keahlian: ["Legalisasi Dokumen", "Administrasi Umum", "Front Office"],
     email: "tia@kemenag.go.id",
@@ -128,7 +128,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19850315 201201 1 007",
     jabatan: "Staf Tata Usaha",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/jajang.jpg",
+    avatar: "foto/pak razmi.png",
     bio: "Mengelola persuratan, kearsipan dinas, inventaris dan sarana prasarana penunjang operasional kantor KUA.",
     keahlian: ["Tata Usaha", "Manajemen Kearsipan", "Sarana Prasarana"],
     email: "jajang@kemenag.go.id",
@@ -141,7 +141,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19830510 200903 1 005",
     jabatan: "Penghulu Ahli Muda",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/maman.jpg",
+    avatar: "foto/pak ating.png",
     bio: "Melayani bimbingan pranikah calon pengantin, pemeriksaan saksi dan wali nikah, serta memimpin prosesi ijab kabul akad nikah.",
     keahlian: ["Fiqih Munakahat", "Akad Nikah", "Bimwin BP4"],
     email: "maman@kemenag.go.id",
@@ -154,7 +154,7 @@ const DEFAULT_KUA_PEGAWAI = [
     nip: "19810820 200801 1 006",
     jabatan: "Penghulu Ahli Muda",
     wilayah: "KUA Kecamatan Nanggung",
-    avatar: "foto/elya.jpg",
+    avatar: "foto/pak dede.png",
     bio: "Melayani pelayanan pendaftaran akad nikah di kantor maupun bedhol luar kantor, verifikasi status wali, dan registrasi nikah rujuk.",
     keahlian: ["Pemeriksaan Wali Nikah", "Nikah Bedhol", "Registrasi SIMKAH"],
     email: "elya@kemenag.go.id",
@@ -361,7 +361,7 @@ const D1_API = {
           return json.data;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return null;
   },
 
@@ -376,7 +376,7 @@ const D1_API = {
         const json = await res.json();
         return Boolean(json.success);
       }
-    } catch (e) {}
+    } catch (e) { }
     return false;
   },
 
@@ -389,7 +389,7 @@ const D1_API = {
         const json = await res.json();
         return Boolean(json.success);
       }
-    } catch (e) {}
+    } catch (e) { }
     return false;
   },
 
@@ -400,7 +400,7 @@ const D1_API = {
         const json = await res.json();
         if (json.success && json.value) return json.value;
       }
-    } catch (e) {}
+    } catch (e) { }
     return null;
   },
 
@@ -412,7 +412,7 @@ const D1_API = {
         body: JSON.stringify({ key, value })
       });
       return true;
-    } catch (e) {}
+    } catch (e) { }
     return false;
   },
 
@@ -443,7 +443,7 @@ const D1_API = {
           return avatarMap;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return {};
   }
 };
@@ -553,7 +553,7 @@ class KuaState {
     }
     try {
       localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(DEFAULT_KUA_PEGAWAI));
-    } catch (e) {}
+    } catch (e) { }
     return DEFAULT_KUA_PEGAWAI;
   }
 
@@ -639,7 +639,7 @@ class KuaState {
       });
       try {
         localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(this.pegawaiList));
-      } catch (e) {}
+      } catch (e) { }
       console.log("[KUA] Data pegawai dimuat dari Cloudflare D1 SQLite (" + d1Pegawai.length + " staf)");
       renderPegawaiGrid();
     } else {
@@ -654,7 +654,7 @@ class KuaState {
       this.konsultasiList = d1Konsultasi;
       try {
         localStorage.setItem("kua_konsultasi_data", JSON.stringify(this.konsultasiList));
-      } catch (e) {}
+      } catch (e) { }
       console.log("[KUA] Data konsultasi dimuat dari Cloudflare D1 SQLite (" + d1Konsultasi.length + " pesan)");
       renderForumFeed();
       updateAdminInboxBadge();
@@ -664,7 +664,7 @@ class KuaState {
     const d1Hero = avatarMap['hero_img'] || await D1_API.getSetting("hero_img");
     if (d1Hero) {
       this.heroImgUrl = d1Hero;
-      try { localStorage.setItem("kua_hero_img", d1Hero); } catch(e) {}
+      try { localStorage.setItem("kua_hero_img", d1Hero); } catch (e) { }
       initHeroImg();
     }
   }
@@ -1654,7 +1654,7 @@ function renderForumFeed() {
     let matchesCat = true;
     if (activeForumCategory !== "all") {
       matchesCat = item.topik.toLowerCase().includes(activeForumCategory.toLowerCase()) ||
-                   activeForumCategory.toLowerCase().includes(item.topik.toLowerCase());
+        activeForumCategory.toLowerCase().includes(item.topik.toLowerCase());
     }
 
     // Filter search
@@ -1662,10 +1662,10 @@ function renderForumFeed() {
     if (forumSearchQuery.trim() !== "") {
       const q = forumSearchQuery.toLowerCase();
       matchesSearch = (item.judul && item.judul.toLowerCase().includes(q)) ||
-                      (item.pesan && item.pesan.toLowerCase().includes(q)) ||
-                      (item.nama && item.nama.toLowerCase().includes(q)) ||
-                      (item.topik && item.topik.toLowerCase().includes(q)) ||
-                      (item.answer?.isi && item.answer.isi.toLowerCase().includes(q));
+        (item.pesan && item.pesan.toLowerCase().includes(q)) ||
+        (item.nama && item.nama.toLowerCase().includes(q)) ||
+        (item.topik && item.topik.toLowerCase().includes(q)) ||
+        (item.answer?.isi && item.answer.isi.toLowerCase().includes(q));
     }
 
     return matchesStatus && matchesCat && matchesSearch;
@@ -1796,12 +1796,12 @@ function escapeHtmlForCard(text) {
   return text.replace(/[&<>"']/g, (m) => map[m]);
 }
 
-window.toggleLikeKonsultasi = function(id) {
+window.toggleLikeKonsultasi = function (id) {
   state.likeKonsultasi(id);
   renderForumFeed();
 };
 
-window.shareKonsultasi = function(id) {
+window.shareKonsultasi = function (id) {
   const url = window.location.href.split('#')[0] + '#forum-konsultasi';
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(() => {
@@ -1814,7 +1814,7 @@ window.shareKonsultasi = function(id) {
   }
 };
 
-window.resetForumFilters = function() {
+window.resetForumFilters = function () {
   activeForumFilter = "all";
   activeForumCategory = "all";
   forumSearchQuery = "";
@@ -1871,11 +1871,11 @@ function renderAdminInbox() {
     if (adminInboxSearchQuery.trim() !== "") {
       const q = adminInboxSearchQuery.toLowerCase();
       matchesSearch = (item.nama && item.nama.toLowerCase().includes(q)) ||
-                      (item.namaAsli && item.namaAsli.toLowerCase().includes(q)) ||
-                      (item.hp && item.hp.toLowerCase().includes(q)) ||
-                      (item.judul && item.judul.toLowerCase().includes(q)) ||
-                      (item.pesan && item.pesan.toLowerCase().includes(q)) ||
-                      (item.topik && item.topik.toLowerCase().includes(q));
+        (item.namaAsli && item.namaAsli.toLowerCase().includes(q)) ||
+        (item.hp && item.hp.toLowerCase().includes(q)) ||
+        (item.judul && item.judul.toLowerCase().includes(q)) ||
+        (item.pesan && item.pesan.toLowerCase().includes(q)) ||
+        (item.topik && item.topik.toLowerCase().includes(q));
     }
 
     return matchesStatus && matchesSearch;
@@ -1970,7 +1970,7 @@ function renderAdminInbox() {
   }).join('');
 }
 
-window.openModalJawabKonsultasi = function(id) {
+window.openModalJawabKonsultasi = function (id) {
   const item = state.konsultasiList.find(c => c.id === id);
   if (!item) return;
 
@@ -2006,7 +2006,7 @@ window.openModalJawabKonsultasi = function(id) {
   openModal("modal-jawab-konsultasi");
 };
 
-window.toggleStatusKonsultasi = function(id) {
+window.toggleStatusKonsultasi = function (id) {
   state.toggleKonsultasiStatus(id);
   renderAdminInbox();
   renderForumFeed();
@@ -2014,7 +2014,7 @@ window.toggleStatusKonsultasi = function(id) {
   showToast("Status konsultasi berhasil diperbarui.", "success");
 };
 
-window.confirmDeleteKonsultasi = function(id) {
+window.confirmDeleteKonsultasi = function (id) {
   const item = state.konsultasiList.find(c => c.id === id);
   if (!item) return;
 
@@ -2386,5 +2386,45 @@ class KuaChatbot {
 let chatbot;
 document.addEventListener("DOMContentLoaded", () => {
   chatbot = new KuaChatbot();
+
+  // Restore forum collapse state dari localStorage
+  const forumHidden = localStorage.getItem("kua_forum_collapsed") === "true";
+  if (forumHidden) {
+    const content = document.getElementById("forum-collapsible-content");
+    const btn = document.getElementById("btn-toggle-forum");
+    const icon = document.getElementById("forum-toggle-icon");
+    const label = document.getElementById("forum-toggle-label");
+    if (content) content.classList.add("forum-hidden");
+    if (btn) btn.classList.add("collapsed");
+    if (icon) icon.className = "fa-solid fa-chevron-down";
+    if (label) label.textContent = "Tampilkan Forum";
+  }
 });
 
+// Toggle Forum Konsultasi Section
+window.toggleForumSection = function () {
+  const content = document.getElementById("forum-collapsible-content");
+  const btn = document.getElementById("btn-toggle-forum");
+  const icon = document.getElementById("forum-toggle-icon");
+  const label = document.getElementById("forum-toggle-label");
+
+  const isHidden = content.classList.contains("forum-hidden");
+
+  if (isHidden) {
+    // Tampilkan
+    content.classList.remove("forum-hidden");
+    btn.classList.remove("collapsed");
+    btn.setAttribute("aria-expanded", "true");
+    icon.className = "fa-solid fa-chevron-up";
+    label.textContent = "Sembunyikan Forum";
+    localStorage.setItem("kua_forum_collapsed", "false");
+  } else {
+    // Sembunyikan
+    content.classList.add("forum-hidden");
+    btn.classList.add("collapsed");
+    btn.setAttribute("aria-expanded", "false");
+    icon.className = "fa-solid fa-chevron-down";
+    label.textContent = "Tampilkan Forum";
+    localStorage.setItem("kua_forum_collapsed", "true");
+  }
+};

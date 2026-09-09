@@ -38,7 +38,8 @@
       <div class="admin-bar-left">
         <span class="admin-bar-icon"><i class="fa-solid fa-user-shield"></i></span>
         <span>Mode <strong>Administrator</strong> — Anda dapat mengelola konten website KUA</span>
-        <span id="cloud-sync-badge" style="display:none; margin-left:1rem; font-size:0.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,0.2);"></span>
+        <span id="cloud-sync-badge"
+          style="display:none; margin-left:1rem; font-size:0.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,0.2);"></span>
       </div>
       <div class="admin-bar-right">
         <button id="btn-export-data" title="Ekspor data staf ke file JSON agar bisa diimpor di perangkat lain"
@@ -185,7 +186,7 @@
             onclick="promptEditHeroImg()">
             <i class="fa-solid fa-camera"></i> Ubah Foto Hero
           </button>
-          <img src="foto/kantor KUA.jpg" alt="Pelayanan Pernikahan KUA" class="hero-img" id="hero-main-img">
+          <img src="foto/kantor kua3.jpg" alt="Pelayanan Pernikahan KUA" class="hero-img" id="hero-main-img">
 
 
         </div>
@@ -545,6 +546,28 @@
                 kerja tidak dipungut biaya apapun (GRATIS).</p>
             </div>
           </div>
+
+          <!-- Tombol Ambil Antrian Online -->
+          <div class="antrian-card">
+            <div class="antrian-card-icon">
+              <i class="fa-solid fa-ticket"></i>
+            </div>
+            <div class="antrian-card-body">
+              <h4><i class="fa-solid fa-clock-rotate-left"></i> Antrian Online KUA</h4>
+              <p>Ambil nomor antrian pelayanan KUA secara online. Hemat waktu, tidak perlu antre lama di kantor!</p>
+              <div class="antrian-services">
+                <span class="antrian-badge"><i class="fa-solid fa-ring"></i> Pendaftaran Nikah</span>
+                <span class="antrian-badge"><i class="fa-solid fa-file-contract"></i> Legalisasi Dokumen</span>
+                <span class="antrian-badge"><i class="fa-solid fa-certificate"></i> Konsultasi Petugas</span>
+              </div>
+              <a href="https://wa.me/6285715354226?text=Assalamu%27alaikum%2C%20saya%20ingin%20mengambil%20antrian%20pelayanan%20KUA%20Nanggung." 
+                 target="_blank" rel="noopener" class="btn btn-antrian" id="btn-ambil-antrian">
+                <i class="fa-solid fa-ticket"></i> Ambil Antrian Sekarang
+                <i class="fa-solid fa-arrow-right"></i>
+              </a>
+              <small class="antrian-note"><i class="fa-solid fa-circle-info"></i> Konfirmasi via WhatsApp — Respon cepat jam kerja</small>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -732,7 +755,15 @@
           Dapatkan bimbingan dan penjelasan resmi seputar Pernikahan, Rujuk, Hukum Waris, Wakaf, Sertifikasi Halal,
           serta Bimbingan Keluarga Sakinah langsung dari Penghulu dan Penyuluh Agama KUA Kecamatan Nanggung.
         </p>
+        <!-- Toggle Button untuk collapse/expand review forum -->
+        <button class="btn-toggle-forum" id="btn-toggle-forum" onclick="toggleForumSection()" aria-expanded="true">
+          <i class="fa-solid fa-chevron-up" id="forum-toggle-icon"></i>
+          <span id="forum-toggle-label">Sembunyikan Forum</span>
+        </button>
       </div>
+
+      <!-- Konten forum yang bisa di-hide -->
+      <div id="forum-collapsible-content">
 
       <!-- Highlight Stats Forum -->
       <div class="forum-stats-bar">
@@ -895,6 +926,8 @@
           </div>
         </div>
       </div>
+
+      </div><!-- /forum-collapsible-content -->
     </div>
   </section>
 
@@ -1032,10 +1065,12 @@
               <div style="flex: 1;">
                 <input type="file" id="form-avatar-file" accept="image/*" class="form-control"
                   style="padding: 0.35rem 0.6rem; font-size: 0.8rem;">
-                <small style="color: var(--kua-text-muted); font-size: 0.75rem;">Pilih foto dari galeri HP / file laptop (otomatis dikompres)</small>
+                <small style="color: var(--kua-text-muted); font-size: 0.75rem;">Pilih foto dari galeri HP / file laptop
+                  (otomatis dikompres)</small>
               </div>
             </div>
-            <input type="text" id="form-avatar" class="form-control" placeholder="Atau ketik link/path foto, misal: foto/baday.jpg">
+            <input type="text" id="form-avatar" class="form-control"
+              placeholder="Atau ketik link/path foto, misal: foto/baday.jpg">
           </div>
 
           <div class="form-group">

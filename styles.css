@@ -4126,3 +4126,221 @@ img {
     flex-direction: column;
   }
 }
+
+/* ==========================================================================
+   ANTRIAN ONLINE CARD
+   ========================================================================== */
+
+.antrian-card {
+  margin-top: 1rem;
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  box-shadow: 0 8px 32px rgba(6, 78, 59, 0.35);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.antrian-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+
+.antrian-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: 40%;
+  width: 80px; height: 80px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+
+.antrian-card-icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+  animation: ticketPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ticketPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.2); }
+  50% { transform: scale(1.07); box-shadow: 0 0 0 8px rgba(255,255,255,0); }
+}
+
+.antrian-card-body {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.antrian-card-body h4 {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.antrian-card-body > p {
+  color: rgba(255,255,255,0.82);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.antrian-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.antrian-badge {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-antrian {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  color: #064e3b;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.65rem 1.2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 0.6rem;
+}
+
+.btn-antrian:hover {
+  background: #d1fae5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  color: #064e3b;
+}
+
+.btn-antrian .fa-arrow-right {
+  margin-left: auto;
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.btn-antrian:hover .fa-arrow-right {
+  transform: translateX(4px);
+}
+
+.antrian-note {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ==========================================================================
+   FORUM KONSULTASI TOGGLE / COLLAPSIBLE
+   ========================================================================== */
+
+.btn-toggle-forum {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--kua-primary-light);
+  color: var(--kua-primary);
+  border: 1.5px solid var(--kua-primary);
+  border-radius: 30px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.btn-toggle-forum:hover {
+  background: var(--kua-primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.3);
+}
+
+.btn-toggle-forum i {
+  transition: transform 0.35s ease;
+  font-size: 0.78rem;
+}
+
+.btn-toggle-forum.collapsed i {
+  transform: rotate(180deg);
+}
+
+/* Smooth collapse animation */
+#forum-collapsible-content {
+  transition: opacity 0.35s ease, max-height 0.45s ease;
+  max-height: 9999px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+#forum-collapsible-content.forum-hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .antrian-card {
+    flex-direction: column;
+    padding: 1.2rem;
+  }
+
+  .antrian-card-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .antrian-badge {
+    font-size: 0.68rem;
+  }
+
+  .btn-antrian {
+    font-size: 0.85rem;
+    padding: 0.6rem 1rem;
+  }
+}
