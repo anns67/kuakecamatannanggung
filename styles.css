@@ -92,9 +92,9 @@ img {
 
 .container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1340px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 }
 
 /* ================= Typography & Global Elements ================= */
@@ -913,9 +913,9 @@ img {
 
 .biaya-wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 3.5rem;
-  align-items: center;
+  align-items: start;
   background: linear-gradient(135deg, #16A34A, #15803d);
   border-radius: var(--radius-lg);
   padding: 3.5rem 3rem;

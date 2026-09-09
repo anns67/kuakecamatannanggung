@@ -1435,10 +1435,13 @@ function initEventListeners() {
       e.preventDefault();
       const consultId = document.getElementById("jawab-konsultasi-id").value;
       const petugasSelect = document.getElementById("jawab-petugas");
+      const petugasId = petugasSelect.value;
       const petugasOption = petugasSelect.options[petugasSelect.selectedIndex];
       const petugasNama = petugasOption.getAttribute("data-nama") || petugasSelect.value;
       const petugasJabatan = petugasOption.getAttribute("data-jabatan") || "Petugas KUA Nanggung";
-      const petugasAvatar = petugasOption.getAttribute("data-avatar") || "";
+      // Ambil avatar langsung dari state (bukan dari data-attribute agar tidak truncated)
+      const petugasData = state.pegawaiList.find(p => p.id === petugasId);
+      const petugasAvatar = petugasData?.avatar || "foto/baday.jpg";
       const isiJawaban = document.getElementById("jawab-isi").value.trim();
 
       const now = new Date();
@@ -1988,12 +1991,13 @@ window.openModalJawabKonsultasi = function (id) {
     `;
   }
 
-  // Populate responders dropdown
+  // Populate responders dropdown - tampilkan nama + jabatan (avatar lookup dari state saat submit)
   const selectPetugas = document.getElementById("jawab-petugas");
   if (selectPetugas) {
     selectPetugas.innerHTML = state.pegawaiList.map(p => {
       const selected = item.answer?.petugasId === p.id ? "selected" : "";
-      return `<option value="${p.id}" data-nama="${p.nama}" data-jabatan="${p.jabatan}" data-avatar="${p.avatar}" ${selected}>${p.nama} (${p.jabatan})</option>`;
+      const roleBadge = p.role === 'kepala' ? '👑' : p.role === 'penghulu' ? '📋' : '🏛️';
+      return `<option value="${p.id}" data-nama="${p.nama}" data-jabatan="${p.jabatan}" ${selected}>${roleBadge} ${p.nama} — ${p.jabatan}</option>`;
     }).join('');
   }
 
