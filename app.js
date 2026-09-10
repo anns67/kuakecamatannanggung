@@ -1699,18 +1699,10 @@ function renderForumFeed() {
 
     let answerHtml = "";
     if (post.status === "answered" && post.answer) {
-      let avatarHtml = `<div class="fpost-responder-avatar-fallback"><i class="fa-solid fa-user-tie"></i></div>`;
-      if (post.answer.avatar && post.answer.avatar.startsWith("http")) {
-        avatarHtml = `<img src="${post.answer.avatar}" alt="${post.answer.petugasNama}" class="fpost-responder-avatar">`;
-      } else if (post.answer.avatar) {
-        avatarHtml = `<div class="fpost-responder-avatar-fallback"><i class="fa-solid fa-mosque"></i></div>`;
-      }
-
       answerHtml = `
         <div class="fpost-official-answer">
           <div class="fpost-official-header">
             <div class="fpost-official-responder">
-              ${avatarHtml}
               <div class="fpost-responder-info">
                 <strong>${post.answer.petugasNama}</strong>
                 <span>${post.answer.petugasJabatan}</span>
