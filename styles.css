@@ -1351,7 +1351,7 @@ img {
   box-shadow: var(--shadow-lg);
 }
 
-/* Badges untuk Peran Pegawai */
+/* Badges untuk Peran Pegawai (Semua Jabatan Seragam Warna Hijau KUA) */
 .pegawai-badge {
   position: absolute;
   top: 1.25rem;
@@ -1366,30 +1366,18 @@ img {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-}
-
-.pegawai-badge.badge-kepala {
   background: linear-gradient(135deg, #15803d, #16a34a);
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.25);
 }
 
-.pegawai-badge.badge-wakil {
-  background: linear-gradient(135deg, #0284c7, #0ea5e9);
-}
-
-.pegawai-badge.badge-pembina {
-  background: linear-gradient(135deg, #d97706, #f59e0b);
-}
-
-.pegawai-badge.badge-penghulu {
-  background: linear-gradient(135deg, #059669, #10b981);
-}
-
-.pegawai-badge.badge-penyuluh {
-  background: linear-gradient(135deg, #0d9488, #14b8a6);
-}
-
+.pegawai-badge.badge-kepala,
+.pegawai-badge.badge-wakil,
+.pegawai-badge.badge-pembina,
+.pegawai-badge.badge-penghulu,
+.pegawai-badge.badge-penyuluh,
 .pegawai-badge.badge-staf {
-  background: linear-gradient(135deg, #334155, #475569);
+  background: linear-gradient(135deg, #15803d, #16a34a);
+  color: #ffffff;
 }
 
 .card-actions-top {
