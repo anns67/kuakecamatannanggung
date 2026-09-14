@@ -4686,3 +4686,303 @@ img {
   color: #dc2626;
   background: #fee2e2;
 }
+
+/* ==========================================================================
+   OPTIMASI TAMPILAN LAYAR BESAR (32 INCH, 42 INCH, SMART TV & DISPLAY 1080P/2K/4K)
+   ========================================================================== */
+
+/* --- 1. LAYAR 1600px - 1920px (32" Full HD / Monitor Lebar / Display Informasi) --- */
+@media (min-width: 1600px) {
+  html {
+    font-size: 16.5px;
+  }
+
+  .container {
+    max-width: 1560px;
+    padding: 0 2.5rem;
+  }
+
+  .hero-section {
+    padding: 11.5rem 0 6rem;
+  }
+
+  .hero-container {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+  }
+
+  .hero-title {
+    font-size: 3.6rem;
+    line-height: 1.18;
+  }
+
+  .hero-description {
+    font-size: 1.18rem;
+    max-width: 680px;
+  }
+
+  .layanan-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .layanan-card {
+    padding: 2.25rem;
+  }
+
+  .pegawai-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+  }
+
+  .pegawai-card {
+    padding: 1.85rem 1.35rem 1.5rem;
+  }
+
+  .pegawai-avatar-wrapper {
+    width: 145px;
+    height: 145px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .stat-card {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 3.25rem;
+  }
+
+  .alur-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .alur-step-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .footer-container {
+    grid-template-columns: 1.8fr 1fr 1fr 1.2fr;
+    gap: 3.5rem;
+  }
+
+  .modal-dialog.modal-lg {
+    max-width: 900px;
+  }
+
+  .modal-dialog.modal-xl {
+    max-width: 1240px;
+  }
+}
+
+/* --- 2. LAYAR 2000px - 2600px (42" Smart TV / 2K QHD / TV Ruang Tunggu KUA) --- */
+@media (min-width: 2000px) {
+  html {
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: 1920px;
+    padding: 0 3.5rem;
+  }
+
+  .section {
+    padding: 7.5rem 0;
+  }
+
+  .section-title {
+    font-size: 2.85rem;
+  }
+
+  .section-description {
+    font-size: 1.25rem;
+    max-width: 800px;
+  }
+
+  .hero-section {
+    padding: 13rem 0 7.5rem;
+  }
+
+  .hero-container {
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 5rem;
+  }
+
+  .hero-title {
+    font-size: 4.2rem;
+  }
+
+  .hero-description {
+    font-size: 1.3rem;
+    max-width: 780px;
+  }
+
+  .hero-btn-group .btn {
+    padding: 1.1rem 2.2rem;
+    font-size: 1.15rem;
+  }
+
+  .hero-img-card {
+    height: 480px;
+    border-radius: 28px;
+  }
+
+  .layanan-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .layanan-card {
+    padding: 2.75rem 2.25rem;
+    border-radius: 24px;
+  }
+
+  .layanan-icon-box {
+    width: 74px;
+    height: 74px;
+    font-size: 1.85rem;
+  }
+
+  .pegawai-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.25rem;
+  }
+
+  .pegawai-card {
+    padding: 2.25rem 1.5rem 1.75rem;
+    border-radius: 24px;
+  }
+
+  .pegawai-avatar-wrapper {
+    width: 165px;
+    height: 165px;
+  }
+
+  .pegawai-nama {
+    font-size: 1.25rem;
+  }
+
+  .antrian-card {
+    padding: 2.25rem 2.5rem;
+    border-radius: 26px;
+  }
+
+  .antrian-card-icon {
+    width: 76px;
+    height: 76px;
+    font-size: 2.2rem;
+    border-radius: 20px;
+  }
+
+  .antrian-badge {
+    font-size: 0.88rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .btn-antrian {
+    font-size: 1.05rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 14px;
+  }
+
+  .alur-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+  }
+
+  .jadwal-table-container {
+    border-radius: 22px;
+  }
+
+  .jadwal-table th,
+  .jadwal-table td {
+    padding: 1.2rem 1.5rem;
+  }
+
+  .modal-dialog {
+    max-width: 750px;
+  }
+
+  .modal-dialog.modal-lg {
+    max-width: 1080px;
+  }
+
+  .modal-dialog.modal-xl {
+    max-width: 1440px;
+  }
+
+  .chatbot-window {
+    width: 440px;
+    height: 600px;
+  }
+}
+
+/* --- 3. LAYAR 2800px+ (4K UHD TV 42"-55"+ / Digital Signage KUA 3840x2160) --- */
+@media (min-width: 2800px) {
+  html {
+    font-size: 22px;
+  }
+
+  .container {
+    max-width: 2560px;
+    padding: 0 4.5rem;
+  }
+
+  .section {
+    padding: 9rem 0;
+  }
+
+  .section-title {
+    font-size: 3.5rem;
+  }
+
+  .hero-section {
+    padding: 15rem 0 9rem;
+  }
+
+  .hero-title {
+    font-size: 5rem;
+  }
+
+  .hero-description {
+    font-size: 1.5rem;
+    max-width: 950px;
+  }
+
+  .hero-img-card {
+    height: 600px;
+    border-radius: 32px;
+  }
+
+  .pegawai-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.75rem;
+  }
+
+  .pegawai-avatar-wrapper {
+    width: 190px;
+    height: 190px;
+  }
+
+  .layanan-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  .footer-container {
+    gap: 5rem;
+  }
+
+  .modal-dialog.modal-lg {
+    max-width: 1300px;
+  }
+
+  .modal-dialog.modal-xl {
+    max-width: 1750px;
+  }
+}
