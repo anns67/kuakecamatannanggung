@@ -1040,6 +1040,9 @@ function renderPegawaiGrid() {
     } else if (p.role === "penyuluh") {
       badgeClass = "badge-penyuluh";
       badgeLabel = `<i class="fa-solid fa-book-quran"></i> PENYULUH AGAMA`;
+    } else if (p.role === "pengawas") {
+      badgeClass = "badge-pengawas";
+      badgeLabel = `<i class="fa-solid fa-clipboard-check"></i> PENGAWAS`;
     }
 
     return `
@@ -1141,6 +1144,7 @@ window.openDetailPegawaiModal = function (id) {
   if (p.role === "pembina") { badgeClass = "badge-pembina"; badgeText = "PEMBINA KUA"; }
   if (p.role === "penghulu") { badgeClass = "badge-penghulu"; badgeText = "PENASIHAT / PENGHULU PPAN"; }
   if (p.role === "penyuluh") { badgeClass = "badge-penyuluh"; badgeText = "PENYULUH AGAMA ISLAM"; }
+  if (p.role === "pengawas") { badgeClass = "badge-pengawas"; badgeText = "PENGAWAS"; }
 
   let keahlianList = [];
   if (p.keahlian) {
@@ -2360,7 +2364,7 @@ window.openModalJawabKonsultasi = function (id) {
   if (selectPetugas) {
     selectPetugas.innerHTML = state.pegawaiList.map(p => {
       const selected = item.answer?.petugasId === p.id ? "selected" : "";
-      const roleBadge = p.role === 'kepala' ? '👑' : p.role === 'penghulu' ? '📋' : '🏛️';
+      const roleBadge = p.role === 'kepala' ? '👑' : p.role === 'penghulu' ? '📋' : p.role === 'pengawas' ? '📝' : '🏛️';
       return `<option value="${p.id}" data-nama="${p.nama}" data-jabatan="${p.jabatan}" ${selected}>${roleBadge} ${p.nama} — ${p.jabatan}</option>`;
     }).join('');
   }
