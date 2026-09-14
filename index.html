@@ -42,6 +42,10 @@
           style="display:none; margin-left:1rem; font-size:0.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,0.2);"></span>
       </div>
       <div class="admin-bar-right">
+        <button id="btn-manage-keahlian" class="btn btn-outline-white btn-sm" title="Kelola daftar master pilihan keahlian & spesialisasi"
+          style="margin-right: 0.5rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,0,0.1);">
+          <i class="fa-solid fa-tags"></i> Kelola Pilihan Keahlian
+        </button>
         <button id="btn-export-data" title="Ekspor data staf ke file JSON agar bisa diimpor di perangkat lain"
           style="margin-right: 0.5rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,100,0,0.3); padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
           <i class="fa-solid fa-download"></i> Ekspor Data
@@ -1086,6 +1090,44 @@
               placeholder="Jelaskan peran tugas pelayanan nikah, bimbingan, atau administrasi..." required></textarea>
           </div>
 
+          <!-- Keahlian & Spesialisasi Pelayanan -->
+          <div class="form-group keahlian-form-section">
+            <div class="keahlian-header-row">
+              <label><i class="fa-solid fa-award highlight-green"></i> Keahlian & Spesialisasi Pelayanan <span class="required">*</span></label>
+              <button type="button" class="btn-text-link" id="btn-open-master-keahlian-form" title="Buka panel kelola master keahlian">
+                <i class="fa-solid fa-sliders"></i> Kelola Master Pilihan
+              </button>
+            </div>
+            <p class="keahlian-field-hint">Pilih keahlian dari daftar di bawah (klik tag untuk memilih/membatalkan) atau ketik untuk menambahkan pilihan baru:</p>
+            
+            <!-- Box Tag Terpilih -->
+            <div class="keahlian-selected-container" id="form-keahlian-selected-box">
+              <!-- Injected dynamically via JS -->
+            </div>
+
+            <!-- Search & Quick Add Input -->
+            <div class="keahlian-input-group">
+              <div class="keahlian-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="form-keahlian-search" class="form-control" placeholder="Cari atau ketik nama keahlian/spesialisasi baru...">
+              </div>
+              <button type="button" id="btn-add-new-keahlian" class="btn btn-secondary btn-sm" style="white-space: nowrap;">
+                <i class="fa-solid fa-plus"></i> Tambah Pilihan
+              </button>
+            </div>
+
+            <!-- Tag Cloud Pilihan Keahlian -->
+            <div class="keahlian-options-wrapper">
+              <div class="keahlian-options-label">
+                <span>Pilihan Keahlian Tersedia:</span>
+                <span id="keahlian-options-count-badge" class="badge-count">0 pilihan</span>
+              </div>
+              <div class="keahlian-options-cloud" id="form-keahlian-options-list">
+                <!-- Injected dynamically via JS -->
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label for="form-hp">Nomor HP / WhatsApp <span class="required">*</span></label>
             <input type="text" id="form-hp" class="form-control" placeholder="0812-3456-7890" required>
@@ -1097,6 +1139,51 @@
               Pegawai</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Kelola Master Pilihan Keahlian & Spesialisasi Admin -->
+  <div id="modal-master-keahlian" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <div class="d-flex align-items-center justify-content-between w-100 flex-wrap gap-2">
+          <div>
+            <h3><i class="fa-solid fa-tags highlight-green"></i> Kelola Master Pilihan Keahlian & Spesialisasi</h3>
+            <p>Tambahkan pilihan keahlian baru atau kelola pilihan yang tersedia agar dapat dipilih dengan mudah pada profil pegawai.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Form Tambah Keahlian Master -->
+        <div class="master-keahlian-add-box">
+          <form id="form-add-master-keahlian" class="d-flex gap-2 flex-wrap" onsubmit="event.preventDefault(); window.handleAddMasterKeahlianSubmit();">
+            <input type="text" id="input-new-master-keahlian" class="form-control" style="flex: 1; min-width: 240px;" placeholder="Tulis nama keahlian / spesialisasi baru..." required>
+            <button type="submit" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Tambah ke Master Pilihan
+            </button>
+          </form>
+        </div>
+
+        <!-- Search Master List -->
+        <div class="master-keahlian-toolbar">
+          <div class="search-box" style="flex: 1;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="master-keahlian-search" placeholder="Cari dalam daftar master keahlian...">
+          </div>
+          <div class="master-keahlian-stats" id="master-keahlian-stats-text">
+            Total: 0 Pilihan Keahlian
+          </div>
+        </div>
+
+        <!-- Grid / List of Master Tags -->
+        <div class="master-keahlian-grid" id="master-keahlian-items-list">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal>Tutup</button>
       </div>
     </div>
   </div>
@@ -1289,7 +1376,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 
 </html>

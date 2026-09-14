@@ -162,6 +162,48 @@ const DEFAULT_KUA_PEGAWAI = [
   }
 ];
 
+// --- INITIAL MASTER PILIHAN KEAHLIAN & SPESIALISASI KUA ---
+const DEFAULT_KUA_KEAHLIAN = [
+  "Hukum Munakahat",
+  "Manajemen Pelayanan Publik",
+  "Penasihat BP4",
+  "Kepemimpinan Syariah",
+  "Pemeriksaan Berkas N1-N4",
+  "Legalitas Akta Nikah",
+  "Konseling Suscatin",
+  "Fiqih Munakahat",
+  "Akta Nikah SIMKAH",
+  "Bimbingan Calon Pengantin",
+  "Pembinaan Majelis Taklim",
+  "Bimbingan Syariah",
+  "Konseling Rohani",
+  "Konseling Keluarga",
+  "Bimbingan BP4",
+  "Hukum Keluarga Islam",
+  "Bimwin Pranikah",
+  "Penyuluhan BP4",
+  "Majelis Taklim Ibu-Ibu",
+  "Pencegahan Stunting",
+  "Konseling Sakinah",
+  "Operator SIMKAH Web 4.0",
+  "Pelayanan Front Office",
+  "Pengarsipan Akta Nikah",
+  "Legalisasi Dokumen",
+  "Administrasi Umum",
+  "Tata Usaha",
+  "Manajemen Kearsipan",
+  "Sarana Prasarana",
+  "Akad Nikah",
+  "Pemeriksaan Wali Nikah",
+  "Nikah Bedhol",
+  "Registrasi SIMKAH",
+  "Wakaf & Kemasjidan",
+  "Sertifikasi Halal (P3H)",
+  "Faraid / Waris",
+  "Zakat & Infaq",
+  "Hisab & Rukyat / Falak"
+];
+
 // --- INITIAL MOCK DATA KONSULTASI FORUM KUA ---
 const DEFAULT_KUA_KONSULTASI = [
   {
@@ -452,11 +494,63 @@ const D1_API = {
 class KuaState {
   constructor() {
     this.pegawaiList = this.loadPegawaiFromStorage();
+    this.masterKeahlian = this.loadMasterKeahlianFromStorage();
     this.activeRoleFilter = "all";
     this.searchQuery = "";
     this.isAdmin = false;
     this.heroImgUrl = this.loadHeroImgFromStorage();
     this.konsultasiList = this.loadKonsultasiFromStorage();
+  }
+
+  loadMasterKeahlianFromStorage() {
+    let list = [...DEFAULT_KUA_KEAHLIAN];
+    const saved = localStorage.getItem("kua_master_keahlian");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          list = parsed;
+        }
+      } catch (e) {
+        console.error("Gagal membaca master keahlian dari LocalStorage", e);
+      }
+    }
+    // Sinkronkan keahlian yang ada di daftar pegawai saat ini jika belum terdaftar
+    if (Array.isArray(this.pegawaiList)) {
+      this.pegawaiList.forEach(p => {
+        if (Array.isArray(p.keahlian)) {
+          p.keahlian.forEach(k => {
+            const trimmed = (k || "").trim();
+            if (trimmed && !list.some(item => item.toLowerCase() === trimmed.toLowerCase())) {
+              list.push(trimmed);
+            }
+          });
+        }
+      });
+    }
+    return list;
+  }
+
+  saveMasterKeahlianToStorage() {
+    try {
+      localStorage.setItem("kua_master_keahlian", JSON.stringify(this.masterKeahlian));
+    } catch (e) { }
+    D1_API.saveSetting("master_keahlian", JSON.stringify(this.masterKeahlian));
+  }
+
+  addMasterKeahlian(nama) {
+    const trimmed = (nama || "").trim();
+    if (!trimmed) return null;
+    const existing = this.masterKeahlian.find(k => k.toLowerCase() === trimmed.toLowerCase());
+    if (existing) return existing;
+    this.masterKeahlian.push(trimmed);
+    this.saveMasterKeahlianToStorage();
+    return trimmed;
+  }
+
+  deleteMasterKeahlian(nama) {
+    this.masterKeahlian = this.masterKeahlian.filter(k => k.toLowerCase() !== nama.toLowerCase());
+    this.saveMasterKeahlianToStorage();
   }
 
   loadKonsultasiFromStorage() {
@@ -667,6 +761,22 @@ class KuaState {
       try { localStorage.setItem("kua_hero_img", d1Hero); } catch (e) { }
       initHeroImg();
     }
+
+    // 6. Ambil master pilihan keahlian dari D1 SQLite jika ada
+    try {
+      const d1KeahlianRaw = await D1_API.getSetting("master_keahlian");
+      if (d1KeahlianRaw) {
+        const d1Keahlian = JSON.parse(d1KeahlianRaw);
+        if (Array.isArray(d1Keahlian) && d1Keahlian.length > 0) {
+          d1Keahlian.forEach(k => {
+            if (!this.masterKeahlian.some(item => item.toLowerCase() === k.toLowerCase())) {
+              this.masterKeahlian.push(k);
+            }
+          });
+          try { localStorage.setItem("kua_master_keahlian", JSON.stringify(this.masterKeahlian)); } catch (e) { }
+        }
+      }
+    } catch (e) { }
   }
 
   addPegawai(pegawai) {
@@ -1078,6 +1188,197 @@ window.openDetailPegawaiModal = function (id) {
   openModal("modal-pegawai-detail");
 };
 
+// --- KEAHLIAN & SPESIALISASI SELECTOR CONTROLLER ---
+let selectedKeahlianForm = [];
+let formKeahlianSearchQuery = "";
+let masterKeahlianSearchQuery = "";
+
+window.renderKeahlianSelector = function () {
+  const selectedBox = document.getElementById("form-keahlian-selected-box");
+  const optionsList = document.getElementById("form-keahlian-options-list");
+  const countBadge = document.getElementById("keahlian-options-count-badge");
+
+  if (!selectedBox || !optionsList) return;
+
+  // 1. Render Tag Terpilih
+  if (selectedKeahlianForm.length === 0) {
+    selectedBox.innerHTML = `
+      <div class="keahlian-selected-empty">
+        <i class="fa-solid fa-circle-info"></i> Belum ada keahlian yang dipilih. Silakan klik tag pilihan di bawah atau ketik pilihan baru.
+      </div>
+    `;
+  } else {
+    selectedBox.innerHTML = selectedKeahlianForm.map(k => `
+      <span class="keahlian-chip-selected">
+        <i class="fa-solid fa-check" style="font-size: 0.7rem;"></i> ${k}
+        <button type="button" class="btn-remove-tag" onclick="window.removeSelectedKeahlian('${k.replace(/'/g, "\\'")}')" title="Hapus ${k}">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </span>
+    `).join("");
+  }
+
+  // 2. Render Pilihan Cloud
+  const masterList = state.masterKeahlian || [];
+  const q = (formKeahlianSearchQuery || "").toLowerCase().trim();
+  const filtered = masterList.filter(k => k.toLowerCase().includes(q));
+
+  if (countBadge) {
+    countBadge.textContent = `${masterList.length} pilihan`;
+  }
+
+  let htmlOptions = "";
+  if (filtered.length > 0) {
+    htmlOptions = filtered.map(k => {
+      const isSelected = selectedKeahlianForm.some(item => item.toLowerCase() === k.toLowerCase());
+      const icon = isSelected ? '<i class="fa-solid fa-check chip-icon"></i>' : '<i class="fa-solid fa-plus chip-icon"></i>';
+      const selectedClass = isSelected ? "is-selected" : "";
+      return `
+        <button type="button" class="keahlian-option-chip ${selectedClass}" onclick="window.toggleKeahlianSelection('${k.replace(/'/g, "\\'")}')" title="${isSelected ? 'Klik untuk membatalkan pilihan' : 'Klik untuk memilih'}">
+          ${icon} <span>${k}</span>
+        </button>
+      `;
+    }).join("");
+  } else {
+    htmlOptions = `<div class="keahlian-empty-search"><i class="fa-solid fa-magnifying-glass"></i> Tidak ada pilihan yang cocok dengan "${formKeahlianSearchQuery}".</div>`;
+  }
+
+  // Jika sedang mencari dan teks belum ada di master keahlian persis, tampilkan tombol tambah cepat
+  if (q && !masterList.some(k => k.toLowerCase() === q)) {
+    const rawVal = formKeahlianSearchQuery.trim();
+    htmlOptions = `
+      <button type="button" class="keahlian-option-chip" style="background: #ecfdf5; border-color: #10b981; color: #047857; font-weight: 700;" onclick="window.addNewKeahlianFromForm('${rawVal.replace(/'/g, "\\'")}')">
+        <i class="fa-solid fa-plus chip-icon"></i> Tambahkan "<strong>${rawVal}</strong>" sebagai pilihan baru
+      </button>
+    ` + htmlOptions;
+  }
+
+  optionsList.innerHTML = htmlOptions;
+};
+
+window.toggleKeahlianSelection = function (nama) {
+  const index = selectedKeahlianForm.findIndex(k => k.toLowerCase() === nama.toLowerCase());
+  if (index !== -1) {
+    selectedKeahlianForm.splice(index, 1);
+  } else {
+    selectedKeahlianForm.push(nama);
+  }
+  renderKeahlianSelector();
+};
+
+window.removeSelectedKeahlian = function (nama) {
+  selectedKeahlianForm = selectedKeahlianForm.filter(k => k.toLowerCase() !== nama.toLowerCase());
+  renderKeahlianSelector();
+};
+
+window.addNewKeahlianFromForm = function (customVal = null) {
+  const input = document.getElementById("form-keahlian-search");
+  const val = customVal || (input ? input.value.trim() : "");
+  if (!val) {
+    showToast("Silakan ketik nama keahlian terlebih dahulu.", "warning");
+    return;
+  }
+
+  const added = state.addMasterKeahlian(val);
+  if (added) {
+    if (!selectedKeahlianForm.some(k => k.toLowerCase() === added.toLowerCase())) {
+      selectedKeahlianForm.push(added);
+    }
+    formKeahlianSearchQuery = "";
+    if (input) input.value = "";
+    renderKeahlianSelector();
+    showToast(`Pilihan keahlian "${added}" berhasil ditambahkan dan dipilih!`, "success");
+  }
+};
+
+// --- MASTER KEAHLIAN MODAL CONTROLLER ---
+window.openMasterKeahlianModal = function () {
+  masterKeahlianSearchQuery = "";
+  const searchInput = document.getElementById("master-keahlian-search");
+  if (searchInput) searchInput.value = "";
+  const addInput = document.getElementById("input-new-master-keahlian");
+  if (addInput) addInput.value = "";
+  renderMasterKeahlianList();
+  openModal("modal-master-keahlian");
+};
+
+window.renderMasterKeahlianList = function () {
+  const container = document.getElementById("master-keahlian-items-list");
+  const statsText = document.getElementById("master-keahlian-stats-text");
+  if (!container) return;
+
+  const masterList = state.masterKeahlian || [];
+  const q = (masterKeahlianSearchQuery || "").toLowerCase().trim();
+  const filtered = masterList.filter(k => k.toLowerCase().includes(q));
+
+  if (statsText) {
+    statsText.textContent = `Total: ${masterList.length} Pilihan Keahlian`;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: #94a3b8;"><i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i> Tidak ditemukan keahlian yang cocok.</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(k => {
+    // Hitung berapa staf yang memiliki keahlian ini
+    const staffCount = state.pegawaiList.filter(p => {
+      if (!p.keahlian) return false;
+      const list = Array.isArray(p.keahlian) ? p.keahlian : p.keahlian.split(',').map(s => s.trim());
+      return list.some(item => item.toLowerCase() === k.toLowerCase());
+    }).length;
+
+    return `
+      <div class="master-keahlian-item">
+        <span class="master-keahlian-item-title" title="${k}">
+          <i class="fa-solid fa-tag highlight-green" style="font-size: 0.75rem; margin-right: 0.35rem;"></i>${k}
+        </span>
+        <div class="master-keahlian-item-meta">
+          <span class="master-keahlian-count" title="${staffCount} staf memiliki keahlian ini">${staffCount} staf</span>
+          <button type="button" class="btn-del-master-tag" onclick="window.confirmDeleteMasterKeahlian('${k.replace(/'/g, "\\'")}')" title="Hapus pilihan '${k}'">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+};
+
+window.handleAddMasterKeahlianSubmit = function () {
+  const input = document.getElementById("input-new-master-keahlian");
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) return;
+
+  const added = state.addMasterKeahlian(val);
+  if (added) {
+    input.value = "";
+    renderMasterKeahlianList();
+    renderKeahlianSelector();
+    showToast(`Keahlian baru "${added}" berhasil ditambahkan ke master!`, "success");
+  }
+};
+
+window.confirmDeleteMasterKeahlian = function (nama) {
+  const staffCount = state.pegawaiList.filter(p => {
+    if (!p.keahlian) return false;
+    const list = Array.isArray(p.keahlian) ? p.keahlian : p.keahlian.split(',').map(s => s.trim());
+    return list.some(item => item.toLowerCase() === nama.toLowerCase());
+  }).length;
+
+  let msg = `Apakah Anda yakin ingin menghapus pilihan "${nama}" dari daftar master?`;
+  if (staffCount > 0) {
+    msg += `\n\nCatatan: Saat ini ada ${staffCount} pegawai yang terhubung dengan keahlian ini.`;
+  }
+
+  if (confirm(msg)) {
+    state.deleteMasterKeahlian(nama);
+    renderMasterKeahlianList();
+    renderKeahlianSelector();
+    showToast(`Pilihan keahlian "${nama}" dihapus dari daftar master.`, "info");
+  }
+};
+
 // --- CRUD FORM MODAL (ADD / EDIT PEGAWAI) ---
 window.openAddPegawaiModal = function () {
   document.getElementById("form-modal-title").innerHTML = `<i class="fa-solid fa-user-plus"></i> Tambah Pegawai KUA Baru`;
@@ -1090,6 +1391,14 @@ window.openAddPegawaiModal = function () {
   const fileInput = document.getElementById("form-avatar-file");
   if (fileInput) fileInput.value = "";
   pendingAvatarBase64 = null; // Reset foto yang tertunda
+  
+  // Inisialisasi keahlian untuk form tambah
+  selectedKeahlianForm = [];
+  formKeahlianSearchQuery = "";
+  const searchInput = document.getElementById("form-keahlian-search");
+  if (searchInput) searchInput.value = "";
+  renderKeahlianSelector();
+
   openModal("modal-pegawai-form");
 };
 
@@ -1115,6 +1424,19 @@ window.openEditPegawaiModal = function (id) {
   const fileInput = document.getElementById("form-avatar-file");
   if (fileInput) fileInput.value = "";
   pendingAvatarBase64 = null; // Reset foto yang tertunda
+
+  // Inisialisasi keahlian dari data pegawai yang diedit
+  if (Array.isArray(p.keahlian)) {
+    selectedKeahlianForm = [...p.keahlian];
+  } else if (p.keahlian) {
+    selectedKeahlianForm = p.keahlian.split(',').map(s => s.trim());
+  } else {
+    selectedKeahlianForm = [];
+  }
+  formKeahlianSearchQuery = "";
+  const searchInput = document.getElementById("form-keahlian-search");
+  if (searchInput) searchInput.value = "";
+  renderKeahlianSelector();
 
   openModal("modal-pegawai-form");
 };
@@ -1277,13 +1599,14 @@ function initEventListeners() {
   document.getElementById("btn-add-pegawai-main")?.addEventListener("click", openAddPegawaiModal);
   document.getElementById("btn-add-pegawai-footer")?.addEventListener("click", openAddPegawaiModal);
 
-  // --- EKSPOR DATA PEGAWAI ---
+  // --- EKSPOR DATA PEGAWAI & MASTER KEAHLIAN ---
   document.getElementById("btn-export-data")?.addEventListener("click", () => {
     const exportData = {
       pegawai: state.pegawaiList,
+      masterKeahlian: state.masterKeahlian,
       konsultasi: state.konsultasiList,
       exportedAt: new Date().toISOString(),
-      version: "1.0"
+      version: "1.1"
     };
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -1293,10 +1616,10 @@ function initEventListeners() {
     a.download = `kua-data-backup-${tgl}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast("✓ Data berhasil diekspor! Kirim file ini ke perangkat lain lalu klik Impor Data.", "success");
+    showToast("✓ Data pegawai & master keahlian berhasil diekspor!", "success");
   });
 
-  // --- IMPOR DATA PEGAWAI ---
+  // --- IMPOR DATA PEGAWAI & MASTER KEAHLIAN ---
   document.getElementById("import-data-file")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1308,7 +1631,12 @@ function initEventListeners() {
           state.pegawaiList = imported.pegawai;
           state.savePegawaiToStorage();
           renderPegawaiGrid();
-          showToast(`✓ Data ${imported.pegawai.length} pegawai berhasil diimpor dari file backup!`, "success");
+          showToast(`✓ Data ${imported.pegawai.length} pegawai berhasil diimpor!`, "success");
+        }
+        if (imported.masterKeahlian && Array.isArray(imported.masterKeahlian)) {
+          state.masterKeahlian = imported.masterKeahlian;
+          state.saveMasterKeahlianToStorage();
+          renderKeahlianSelector();
         }
         if (imported.konsultasi && Array.isArray(imported.konsultasi)) {
           state.konsultasiList = imported.konsultasi;
@@ -1323,6 +1651,33 @@ function initEventListeners() {
     };
     reader.readAsText(file);
   });
+
+  // Event Listeners Manajemen Keahlian & Spesialisasi
+  document.getElementById("btn-manage-keahlian")?.addEventListener("click", openMasterKeahlianModal);
+  document.getElementById("btn-open-master-keahlian-form")?.addEventListener("click", openMasterKeahlianModal);
+  document.getElementById("btn-add-new-keahlian")?.addEventListener("click", () => addNewKeahlianFromForm());
+
+  const formKeahlianSearch = document.getElementById("form-keahlian-search");
+  if (formKeahlianSearch) {
+    formKeahlianSearch.addEventListener("input", (e) => {
+      formKeahlianSearchQuery = e.target.value;
+      renderKeahlianSelector();
+    });
+    formKeahlianSearch.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addNewKeahlianFromForm();
+      }
+    });
+  }
+
+  const masterKeahlianSearch = document.getElementById("master-keahlian-search");
+  if (masterKeahlianSearch) {
+    masterKeahlianSearch.addEventListener("input", (e) => {
+      masterKeahlianSearchQuery = e.target.value;
+      renderMasterKeahlianList();
+    });
+  }
 
   // Filter Buttons Pegawai Role
   const roleFilterBtns = document.querySelectorAll("#pegawai-role-filters .p-filter-btn");
@@ -1364,7 +1719,8 @@ function initEventListeners() {
       // PRIORITAS: 1) file yang baru dipilih (base64 di JS var), 2) URL manual di text input, 3) avatar lama
       const avatarTextVal = document.getElementById("form-avatar")?.value.trim();
       const avatar = pendingAvatarBase64 || avatarTextVal || existing?.avatar || "foto/baday.jpg";
-      const keahlian = existing?.keahlian || [];
+      // Ambil keahlian terpilih dari form selector
+      const keahlian = selectedKeahlianForm.length > 0 ? selectedKeahlianForm : (existing?.keahlian || []);
 
       const pegawaiData = {
         nama,
