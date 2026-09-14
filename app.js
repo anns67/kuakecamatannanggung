@@ -640,15 +640,25 @@ class KuaState {
     const saved = localStorage.getItem("kua_pegawai_data_v3");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((p, idx) => ({
+            ...p,
+            urutan: (p.urutan !== undefined && p.urutan !== null && p.urutan > 0) ? p.urutan : (idx + 1)
+          }));
+        }
       } catch (e) {
         console.error("Gagal membaca data dari LocalStorage", e);
       }
     }
+    const defaultsWithOrder = DEFAULT_KUA_PEGAWAI.map((p, idx) => ({
+      ...p,
+      urutan: (p.urutan !== undefined && p.urutan !== null && p.urutan > 0) ? p.urutan : (idx + 1)
+    }));
     try {
-      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(DEFAULT_KUA_PEGAWAI));
+      localStorage.setItem("kua_pegawai_data_v3", JSON.stringify(defaultsWithOrder));
     } catch (e) { }
-    return DEFAULT_KUA_PEGAWAI;
+    return defaultsWithOrder;
   }
 
   savePegawaiToStorage(pegawaiToSync = null) {
@@ -781,6 +791,9 @@ class KuaState {
 
   addPegawai(pegawai) {
     pegawai.id = "kua-" + Date.now();
+    // Pastikan staf baru selalu mendapatkan nomor urutan tertinggi agar tampil di paling akhir
+    const maxUrutan = this.pegawaiList.reduce((max, p) => Math.max(max, Number(p.urutan) || 0), 0);
+    pegawai.urutan = Math.max(maxUrutan, this.pegawaiList.length) + 1;
     this.pegawaiList.push(pegawai);
     this.savePegawaiToStorage(pegawai);
   }
@@ -800,7 +813,10 @@ class KuaState {
   }
 
   getFilteredPegawai() {
-    return this.pegawaiList.filter(p => {
+    // Urutkan pegawai berdasarkan urutan ASC sehingga staf baru selalu di akhir
+    const sorted = [...this.pegawaiList].sort((a, b) => (Number(a.urutan) || 9999) - (Number(b.urutan) || 9999));
+
+    return sorted.filter(p => {
       // Filter Peran
       let matchesRole = true;
       if (this.activeRoleFilter !== "all") {

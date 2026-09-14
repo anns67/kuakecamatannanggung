@@ -104,6 +104,12 @@ export async function onRequestPost(context) {
     const keahlianStr = Array.isArray(p.keahlian) ? JSON.stringify(p.keahlian) : (p.keahlian || "[]");
     const id = p.id || ("kua-" + Date.now());
 
+    let urutanVal = p.urutan;
+    if (!urutanVal || urutanVal <= 0) {
+      const maxRow = await env.DB.prepare("SELECT COALESCE(MAX(urutan), 0) as max_u FROM pegawai").first();
+      urutanVal = (maxRow ? maxRow.max_u : 0) + 1;
+    }
+
     await env.DB.prepare(`
       INSERT INTO pegawai (id, nama, role, nip, jabatan, wilayah, avatar, bio, keahlian, email, hp, urutan, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
@@ -118,7 +124,7 @@ export async function onRequestPost(context) {
         keahlian = excluded.keahlian,
         email = excluded.email,
         hp = excluded.hp,
-        urutan = excluded.urutan,
+        urutan = CASE WHEN excluded.urutan > 0 THEN excluded.urutan ELSE pegawai.urutan END,
         updated_at = CURRENT_TIMESTAMP
     `).bind(
       id,
@@ -132,7 +138,7 @@ export async function onRequestPost(context) {
       keahlianStr,
       p.email || "",
       p.hp || "",
-      p.urutan || 0
+      urutanVal
     ).run();
 
     return Response.json({ success: true, id, message: "Data pegawai berhasil disimpan ke D1 SQLite!" });
