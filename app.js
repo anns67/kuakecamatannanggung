@@ -915,6 +915,95 @@ document.addEventListener("DOMContentLoaded", async () => {
   state.loadFromD1();
 });
 
+// --- TOAST NOTIFICATION ---
+function showToast(message, type = "info") {
+  const container = document.getElementById("toast-container");
+  if (!container) { console.log("[Toast]", message); return; }
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  const iconMap = {
+    success: "fa-circle-check",
+    error: "fa-circle-xmark",
+    warning: "fa-triangle-exclamation",
+    info: "fa-circle-info"
+  };
+  toast.innerHTML = `<i class="fa-solid ${iconMap[type] || iconMap.info}"></i><span>${message}</span>`;
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("hide");
+    setTimeout(() => toast.remove(), 400);
+  }, 3500);
+}
+window.showToast = showToast;
+
+// --- ADMIN UI STATE ---
+function updateAdminUI() {
+  let isAdmin = false;
+  try {
+    isAdmin = sessionStorage.getItem("kua_admin_session") === "true" ||
+              localStorage.getItem("kua_admin_session") === "true";
+  } catch (e) {}
+
+  if (state) state.isAdmin = isAdmin;
+
+  const adminBar = document.getElementById("admin-bar");
+  const btnOpenLogin = document.getElementById("btn-open-login");
+  const btnOpenLoginLink = document.getElementById("btn-open-login-link");
+
+  if (isAdmin) {
+    if (adminBar) adminBar.style.display = "block";
+    if (btnOpenLogin) btnOpenLogin.style.display = "none";
+    if (btnOpenLoginLink) btnOpenLoginLink.style.display = "none";
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.style.display = el.tagName === "BUTTON" ? "inline-flex" : "flex";
+    });
+    document.querySelectorAll(".non-admin-only").forEach(el => {
+      el.style.display = "none";
+    });
+  } else {
+    if (adminBar) adminBar.style.display = "none";
+    if (btnOpenLogin) btnOpenLogin.style.display = "inline-flex";
+    document.querySelectorAll(".admin-only").forEach(el => {
+      el.style.display = "none";
+    });
+    document.querySelectorAll(".non-admin-only").forEach(el => {
+      el.style.display = "";
+    });
+  }
+}
+window.updateAdminUI = updateAdminUI;
+
+function updateAdminInboxBadge() {
+  const badge = document.getElementById("inbox-badge-count");
+  if (!badge) return;
+  try {
+    const msgs = JSON.parse(localStorage.getItem("kua_inbox_messages") || "[]");
+    const unread = msgs.filter(m => !m.read).length;
+    if (unread > 0) {
+      badge.textContent = unread;
+      badge.style.display = "inline-flex";
+    } else {
+      badge.style.display = "none";
+    }
+  } catch (e) {
+    badge.style.display = "none";
+  }
+}
+window.updateAdminInboxBadge = updateAdminInboxBadge;
+
+// --- MANAGE HERO MODAL ---
+function openManageHeroModal() {
+  const modal = document.getElementById("modal-manage-hero");
+  if (modal) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+window.openManageHeroModal = openManageHeroModal;
+
 // --- NAVBAR SCROLL & MOBILE MENU ---
 function initNavbar() {
   const navbar = document.getElementById("navbar");
