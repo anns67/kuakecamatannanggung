@@ -1091,6 +1091,136 @@ function initHeroImg() {
   if (heroImg) {
     heroImg.src = state.heroImgUrl;
   }
+  initHeroSlideshow();
+}
+
+/* ====== Hero Slideshow Controller ====== */
+function initHeroSlideshow() {
+  const slideshow = document.getElementById("hero-slideshow");
+  if (!slideshow) return;
+
+  const slides = slideshow.querySelectorAll(".hero-slide");
+  const dots = slideshow.querySelectorAll(".hero-dot");
+  const prevBtn = document.getElementById("hero-prev");
+  const nextBtn = document.getElementById("hero-next");
+  const progressBar = document.getElementById("hero-progress-bar");
+
+  if (slides.length === 0) return;
+
+  let currentSlide = 0;
+  const totalSlides = slides.length;
+  const AUTOPLAY_INTERVAL = 5000; // 5 seconds
+  let autoplayTimer = null;
+  let progressTimer = null;
+  let progressStart = 0;
+  let isPaused = false;
+
+  function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+
+    slides.forEach(s => s.classList.remove("active"));
+    dots.forEach(d => d.classList.remove("active"));
+
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+    currentSlide = index;
+
+    resetProgress();
+  }
+
+  function nextSlide() {
+    goToSlide(currentSlide + 1);
+  }
+
+  function prevSlide() {
+    goToSlide(currentSlide - 1);
+  }
+
+  // Progress bar animation
+  function resetProgress() {
+    if (progressBar) {
+      progressBar.style.transition = "none";
+      progressBar.style.width = "0%";
+    }
+    clearTimeout(autoplayTimer);
+    cancelAnimationFrame(progressTimer);
+
+    if (!isPaused) {
+      progressStart = performance.now();
+      animateProgress();
+      autoplayTimer = setTimeout(nextSlide, AUTOPLAY_INTERVAL);
+    }
+  }
+
+  function animateProgress() {
+    if (isPaused) return;
+    const elapsed = performance.now() - progressStart;
+    const pct = Math.min((elapsed / AUTOPLAY_INTERVAL) * 100, 100);
+    if (progressBar) {
+      progressBar.style.transition = "none";
+      progressBar.style.width = pct + "%";
+    }
+    if (pct < 100) {
+      progressTimer = requestAnimationFrame(animateProgress);
+    }
+  }
+
+  // Event Listeners
+  if (prevBtn) prevBtn.addEventListener("click", () => { prevSlide(); });
+  if (nextBtn) nextBtn.addEventListener("click", () => { nextSlide(); });
+
+  dots.forEach(dot => {
+    dot.addEventListener("click", () => {
+      const idx = parseInt(dot.getAttribute("data-dot"), 10);
+      goToSlide(idx);
+    });
+  });
+
+  // Pause on hover
+  slideshow.addEventListener("mouseenter", () => {
+    isPaused = true;
+    clearTimeout(autoplayTimer);
+    cancelAnimationFrame(progressTimer);
+  });
+
+  slideshow.addEventListener("mouseleave", () => {
+    isPaused = false;
+    resetProgress();
+  });
+
+  // Touch Swipe support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  slideshow.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    isPaused = true;
+    clearTimeout(autoplayTimer);
+    cancelAnimationFrame(progressTimer);
+  }, { passive: true });
+
+  slideshow.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextSlide(); else prevSlide();
+    }
+    isPaused = false;
+    resetProgress();
+  }, { passive: true });
+
+  // Keyboard navigation when slideshow is in viewport
+  document.addEventListener("keydown", (e) => {
+    const rect = slideshow.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (!inView) return;
+    if (e.key === "ArrowLeft") { prevSlide(); }
+    if (e.key === "ArrowRight") { nextSlide(); }
+  });
+
+  // Start autoplay
+  resetProgress();
 }
 
 let currentEditAvatarId = null;
@@ -2462,12 +2592,22 @@ const KUA_KNOWLEDGE_BASE = [
     Akad nikah dipimpin Penghulu, lalu penyerahan Buku Nikah resmi + Kartu Nikah Digital.`
   },
   {
+    keywords: ["jadwal bimwin", "jadwal suscatin", "kapan bimwin", "hari bimwin", "waktu bimwin", "bimwin hari apa", "kapan jadwal bimwin"],
+    answer: `<b>💑 Jadwal Bimbingan Perkawinan (Bimwin) KUA Nanggung:</b><br><br>
+    📅 <b>Jadwal Pelaksanaan:</b><br>
+    Dilaksanakan <b>setiap hari Selasa dan Kamis</b>.<br><br>
+    ⏰ <b>Waktu:</b> 09.00 – 14.00 WIB<br>
+    📍 <b>Tempat:</b> Gedung Balai Nikah KUA Kecamatan Nanggung<br>
+    ⏳ <b>Durasi:</b> 2 hari bimbingan tatap muka<br><br>
+    📌 <i>Bimbingan Perkawinan (Suscatin) wajib diikuti oleh seluruh calon pengantin sebelum melangsungkan pernikahan untuk pembekalan keluarga sakinah dan sertifikat resmi.</i>`
+  },
+  {
     keywords: ["bimwin", "suscatin", "bimbingan", "kursus", "pra nikah", "pranikah", "calon pengantin"],
     answer: `<b>💑 Bimbingan Perkawinan (Bimwin) KUA Nanggung:</b><br><br>
     📚 <b>Apa itu Bimwin/Suscatin?</b><br>
     Kursus calon pengantin yang wajib diikuti sebelum menikah untuk mempersiapkan kehidupan rumah tangga.<br><br>
     📅 <b>Jadwal Bimwin:</b><br>
-    • Dilaksanakan setiap <b>Rabu & Kamis</b>, pukul 09.00 – 14.00 WIB<br>
+    • Dilaksanakan <b>setiap hari Selasa dan Kamis</b>, pukul 09.00 – 14.00 WIB<br>
     • Durasi: 2 hari (total 16 jam pelajaran)<br><br>
     📋 <b>Materi:</b><br>
     • Hukum pernikahan Islam<br>
