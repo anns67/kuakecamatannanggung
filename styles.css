@@ -635,7 +635,7 @@ img {
 /* Dots Navigation */
 .hero-slide-dots {
   position: absolute;
-  bottom: 4.2rem;
+  bottom: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -2678,7 +2678,7 @@ img {
   }
 
   .hero-slide-dots {
-    bottom: 2.7rem;
+    bottom: 1rem;
   }
 
   .hero-dot {
