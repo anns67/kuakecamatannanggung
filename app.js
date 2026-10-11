@@ -509,7 +509,7 @@ class KuaState {
     this.masterKeahlian = this.loadMasterKeahlianFromStorage();
     this.activeRoleFilter = "all";
     this.searchQuery = "";
-    this.isAdmin = false;
+    this.isAdmin = sessionStorage.getItem("kua_admin_session") === "true";
     this.heroSlides = this.loadHeroSlidesFromStorage();
     this.heroImgUrl = this.heroSlides[0] || this.loadHeroImgFromStorage();
     this.konsultasiList = this.loadKonsultasiFromStorage();
@@ -907,6 +907,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderPegawaiGrid();
   initForum();
   initEventListeners();
+  updateAdminUI();
   updateAdminInboxBadge();
   initScrollReveal();
 
@@ -1427,6 +1428,7 @@ function openModal(modalId) {
     document.body.style.overflow = "hidden";
   }
 }
+window.openModal = openModal;
 
 function closeModal(modalId) {
   const modal = document.getElementById(modalId);
@@ -1435,6 +1437,21 @@ function closeModal(modalId) {
     document.body.style.overflow = "auto";
   }
 }
+window.closeModal = closeModal;
+
+// Fungsi pembuka modal login yang dapat dipanggil dari mana saja (Navbar, Menu, Footer, dll)
+window.openLoginModal = function () {
+  openModal("modal-login");
+  const err = document.getElementById("login-error");
+  if (err) err.style.display = "none";
+  setTimeout(() => {
+    const userField = document.getElementById("login-username");
+    if (userField) {
+      userField.focus();
+      userField.select();
+    }
+  }, 120);
+};
 
 // --- DETAIL MODAL PEGAWAI KUA ---
 window.openDetailPegawaiModal = function (id) {
@@ -2175,11 +2192,17 @@ function initEventListeners() {
       el.style.display = state.isAdmin ? (el.tagName === "BUTTON" ? "inline-block" : "flex") : "none";
     });
 
+    // Elemen yang hanya muncul saat belum login (seperti tombol 'Login Admin')
+    const nonAdminElements = document.querySelectorAll(".non-admin-only");
+    nonAdminElements.forEach(el => {
+      el.style.display = state.isAdmin ? "none" : (el.tagName === "BUTTON" ? "inline-flex" : "");
+    });
+
     const adminBar = document.getElementById("admin-bar");
     if (adminBar) adminBar.style.display = state.isAdmin ? "block" : "none";
 
     const btnOpenLogin = document.getElementById("btn-open-login");
-    if (btnOpenLogin) btnOpenLogin.style.display = state.isAdmin ? "none" : "inline-block";
+    if (btnOpenLogin) btnOpenLogin.style.display = state.isAdmin ? "none" : "inline-flex";
 
     const adminDisplay = document.getElementById("admin-username-display");
     if (adminDisplay) adminDisplay.innerText = "Admin KUA Nanggung";
@@ -2189,22 +2212,31 @@ function initEventListeners() {
     updateAdminInboxBadge();
     state.updateD1StatusBadge();
   }
+  window.updateAdminUI = updateAdminUI;
 
   const loginForm = document.getElementById("login-form");
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
-      const user = document.getElementById("login-username").value;
-      const pass = document.getElementById("login-password").value;
+      const user = (document.getElementById("login-username")?.value || "").trim().toLowerCase();
+      const pass = (document.getElementById("login-password")?.value || "").trim();
 
       if (user === "kuananggung" && pass === "admin67") {
         state.isAdmin = true;
+        try {
+          sessionStorage.setItem("kua_admin_session", "true");
+        } catch (e) { }
         document.getElementById("login-error").style.display = "none";
         closeModal("modal-login");
         showToast("Berhasil masuk sebagai Administrator KUA", "success");
         updateAdminUI();
       } else {
-        document.getElementById("login-error").style.display = "flex";
+        const errEl = document.getElementById("login-error");
+        if (errEl) {
+          errEl.style.display = "flex";
+          const errText = document.getElementById("login-error-text");
+          if (errText) errText.textContent = "Username atau password salah. Silakan periksa kembali.";
+        }
       }
     });
   }
@@ -2224,11 +2256,23 @@ function initEventListeners() {
   }
 
   document.getElementById("btn-open-login")?.addEventListener("click", () => {
-    openModal("modal-login");
+    openLoginModal();
   });
 
   document.getElementById("btn-open-login-link")?.addEventListener("click", () => {
-    openModal("modal-login");
+    openLoginModal();
+  });
+
+  document.getElementById("btn-login-nav")?.addEventListener("click", () => {
+    openLoginModal();
+  });
+
+  document.getElementById("btn-login-mobile")?.addEventListener("click", () => {
+    openLoginModal();
+  });
+
+  document.getElementById("btn-login-pegawai-sec")?.addEventListener("click", () => {
+    openLoginModal();
   });
 
   document.getElementById("btn-open-inbox")?.addEventListener("click", () => {
@@ -2238,6 +2282,9 @@ function initEventListeners() {
 
   document.getElementById("btn-logout")?.addEventListener("click", () => {
     state.isAdmin = false;
+    try {
+      sessionStorage.removeItem("kua_admin_session");
+    } catch (e) { }
     showToast("Berhasil keluar dari mode Admin", "info");
     updateAdminUI();
   });

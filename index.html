@@ -20,7 +20,7 @@
     crossorigin="anonymous">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
 </head>
 
 <body>
@@ -84,6 +84,10 @@
         </div>
         <div class="top-hours">
           <span><i class="fa-solid fa-clock"></i> Sen - Jum: 07.30 - 16.00 WIB</span>
+          <span class="divider non-admin-only">|</span>
+          <a href="javascript:void(0)" class="top-admin-link non-admin-only" onclick="openLoginModal()" title="Login Administrator KUA" style="color: #ffffff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fa-solid fa-lock"></i> Akses Admin
+          </a>
         </div>
       </div>
     </div>
@@ -107,9 +111,18 @@
         <a href="#syarat" class="nav-link">Syarat & Alur</a>
         <a href="#pegawai" class="nav-link">Profil Pegawai & Penghulu</a>
         <a href="#forum-konsultasi" class="nav-link">Forum Konsultasi</a>
+        <a href="javascript:void(0)" class="nav-link nav-link-login-mobile non-admin-only" id="btn-login-mobile" onclick="openLoginModal()" style="color: var(--kua-primary); font-weight: 700;">
+          <i class="fa-solid fa-lock"></i> Login Admin
+        </a>
       </nav>
 
       <div class="nav-actions">
+        <!-- Tombol Login Admin di Navbar (tampil saat belum login) -->
+        <button id="btn-login-nav" class="btn btn-outline-green btn-sm non-admin-only" onclick="openLoginModal()"
+          title="Login Administrator KUA" style="display:inline-flex; align-items:center; gap:0.4rem;">
+          <i class="fa-solid fa-lock"></i> <span>Login Admin</span>
+        </button>
+
         <!-- Tombol admin-only: tampil hanya saat login -->
         <button id="btn-add-pegawai-nav" class="btn btn-secondary btn-sm display-desktop admin-only"
           style="display:none;">
@@ -789,6 +802,11 @@
           <button class="p-filter-btn" data-role="staf"><i class="fa-solid fa-user-gear"></i> Staf Administrasi</button>
         </div>
 
+        <button id="btn-login-pegawai-sec" class="btn btn-outline-green non-admin-only" onclick="openLoginModal()"
+          title="Login Administrator untuk mengelola profil staf">
+          <i class="fa-solid fa-lock"></i> Login Admin (Kelola Staf)
+        </button>
+
         <button id="btn-add-pegawai-main" class="btn btn-primary admin-only" style="display:none;">
           <i class="fa-solid fa-plus"></i> Tambah Pegawai Baru
         </button>
@@ -1035,8 +1053,8 @@
         <h4>Akses Administrator</h4>
         <p class="footer-small">Modul pengelolaan data website KUA, informasi pegawai, dan kotak masuk konsultasi
           masyarakat.</p>
-        <button id="btn-open-login" class="btn btn-outline-white btn-sm margin-top-sm"
-          style="display:inline-flex; gap: 0.5rem; align-items: center;">
+        <button id="btn-open-login" class="btn btn-outline-white btn-sm margin-top-sm non-admin-only"
+          onclick="openLoginModal()" style="display:inline-flex; gap: 0.5rem; align-items: center;">
           <i class="fa-solid fa-lock"></i> Login Administrator
         </button>
         <button id="btn-add-pegawai-footer" class="btn btn-outline-white btn-sm margin-top-sm admin-only"
@@ -1049,7 +1067,7 @@
     <div class="footer-bottom text-center">
       <div class="container">
         <p>&copy; 2026 Kantor Urusan Agama (KUA) - Kementerian Agama Republik Indonesia. All Rights Reserved. &bull; <a
-            href="javascript:void(0)" id="btn-open-login-link"
+            href="javascript:void(0)" id="btn-open-login-link" onclick="openLoginModal()"
             style="color: #64748b; font-size: 0.8rem; text-decoration: none;"><i class="fa-solid fa-user-shield"></i>
             Portal Admin</a></p>
       </div>
@@ -1351,6 +1369,7 @@
   <!-- Modal Login Admin -->
   <div id="modal-login" class="modal-backdrop">
     <div class="modal-dialog modal-login">
+      <button class="modal-close" data-close-modal onclick="closeModal('modal-login')" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
       <div class="login-header">
         <div class="login-logo" style="background: transparent; box-shadow: none;">
           <img src="foto/logo-kua.png" alt="Logo KUA" style="width: 100%; height: 100%; object-fit: contain;">
@@ -1362,7 +1381,12 @@
         <form id="login-form" autocomplete="off">
           <div id="login-error" class="login-error" style="display:none;">
             <i class="fa-solid fa-circle-exclamation"></i>
-            <span id="login-error-text">Username atau password salah.</span>
+            <span id="login-error-text">Username atau password salah. Silakan coba lagi.</span>
+          </div>
+
+          <div class="login-info-box">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>Kredensial Default Administrator KUA Nanggung: Username <strong>kuananggung</strong> | Password <strong>admin67</strong></div>
           </div>
 
           <div class="form-group">
@@ -1370,7 +1394,7 @@
               <i class="fa-solid fa-user"></i> Username Admin
             </label>
             <input type="text" id="login-username" class="form-control" placeholder="Masukkan username admin"
-              autocomplete="off" required>
+              autocomplete="username" required>
           </div>
 
           <div class="form-group">
@@ -1379,20 +1403,18 @@
             </label>
             <div class="password-wrapper">
               <input type="password" id="login-password" class="form-control" placeholder="Masukkan password"
-                autocomplete="off" required>
-              <button type="button" id="toggle-password" class="toggle-pw-btn">
+                autocomplete="current-password" required>
+              <button type="button" id="toggle-password" class="toggle-pw-btn" aria-label="Lihat password">
                 <i class="fa-solid fa-eye"></i>
               </button>
             </div>
           </div>
 
-
-
           <button type="submit" class="btn btn-primary btn-block" id="btn-do-login">
             <i class="fa-solid fa-right-to-bracket"></i> Masuk sebagai Admin
           </button>
 
-          <button type="button" class="btn btn-outline btn-block margin-top-sm" data-close-modal>
+          <button type="button" class="btn btn-outline btn-block margin-top-sm" data-close-modal onclick="closeModal('modal-login')">
             <i class="fa-solid fa-xmark"></i> Batal
           </button>
         </form>
@@ -1445,7 +1467,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
 </body>
 
 </html>
