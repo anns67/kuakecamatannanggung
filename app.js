@@ -2263,17 +2263,6 @@ function initEventListeners() {
     openLoginModal();
   });
 
-  document.getElementById("btn-login-nav")?.addEventListener("click", () => {
-    openLoginModal();
-  });
-
-  document.getElementById("btn-login-mobile")?.addEventListener("click", () => {
-    openLoginModal();
-  });
-
-  document.getElementById("btn-login-pegawai-sec")?.addEventListener("click", () => {
-    openLoginModal();
-  });
 
   document.getElementById("btn-open-inbox")?.addEventListener("click", () => {
     renderAdminInbox();

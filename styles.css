@@ -300,29 +300,8 @@ img {
   gap: 0.75rem;
 }
 
-.top-info .divider,
-.top-hours .divider {
+.top-info .divider {
   opacity: 0.5;
-}
-
-.top-admin-link {
-  transition: var(--transition);
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.top-admin-link:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-#btn-login-nav {
-  transition: var(--transition);
-  font-weight: 600;
-}
-
-#btn-login-nav:hover {
-  transform: translateY(-1px);
 }
 
 .nav-container {
@@ -2478,6 +2457,21 @@ img {
 }
 
 /* ================= Login Modal ================= */
+#modal-login.active {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 999999 !important;
+  pointer-events: auto !important;
+}
+
+#modal-login.active .modal-dialog {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
 .modal-login {
   max-width: 440px;
 }

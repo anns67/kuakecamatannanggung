@@ -20,7 +20,7 @@
     crossorigin="anonymous">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=15">
 </head>
 
 <body>
@@ -84,10 +84,6 @@
         </div>
         <div class="top-hours">
           <span><i class="fa-solid fa-clock"></i> Sen - Jum: 07.30 - 16.00 WIB</span>
-          <span class="divider non-admin-only">|</span>
-          <a href="javascript:void(0)" class="top-admin-link non-admin-only" onclick="openLoginModal()" title="Login Administrator KUA" style="color: #ffffff; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
-            <i class="fa-solid fa-lock"></i> Akses Admin
-          </a>
         </div>
       </div>
     </div>
@@ -111,18 +107,9 @@
         <a href="#syarat" class="nav-link">Syarat & Alur</a>
         <a href="#pegawai" class="nav-link">Profil Pegawai & Penghulu</a>
         <a href="#forum-konsultasi" class="nav-link">Forum Konsultasi</a>
-        <a href="javascript:void(0)" class="nav-link nav-link-login-mobile non-admin-only" id="btn-login-mobile" onclick="openLoginModal()" style="color: var(--kua-primary); font-weight: 700;">
-          <i class="fa-solid fa-lock"></i> Login Admin
-        </a>
       </nav>
 
       <div class="nav-actions">
-        <!-- Tombol Login Admin di Navbar (tampil saat belum login) -->
-        <button id="btn-login-nav" class="btn btn-outline-green btn-sm non-admin-only" onclick="openLoginModal()"
-          title="Login Administrator KUA" style="display:inline-flex; align-items:center; gap:0.4rem;">
-          <i class="fa-solid fa-lock"></i> <span>Login Admin</span>
-        </button>
-
         <!-- Tombol admin-only: tampil hanya saat login -->
         <button id="btn-add-pegawai-nav" class="btn btn-secondary btn-sm display-desktop admin-only"
           style="display:none;">
@@ -802,11 +789,6 @@
           <button class="p-filter-btn" data-role="staf"><i class="fa-solid fa-user-gear"></i> Staf Administrasi</button>
         </div>
 
-        <button id="btn-login-pegawai-sec" class="btn btn-outline-green non-admin-only" onclick="openLoginModal()"
-          title="Login Administrator untuk mengelola profil staf">
-          <i class="fa-solid fa-lock"></i> Login Admin (Kelola Staf)
-        </button>
-
         <button id="btn-add-pegawai-main" class="btn btn-primary admin-only" style="display:none;">
           <i class="fa-solid fa-plus"></i> Tambah Pegawai Baru
         </button>
@@ -1369,7 +1351,7 @@
   <!-- Modal Login Admin -->
   <div id="modal-login" class="modal-backdrop">
     <div class="modal-dialog modal-login">
-      <button class="modal-close" data-close-modal onclick="closeModal('modal-login')" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button class="modal-close" data-close-modal onclick="closeLoginModal()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
       <div class="login-header">
         <div class="login-logo" style="background: transparent; box-shadow: none;">
           <img src="foto/logo-kua.png" alt="Logo KUA" style="width: 100%; height: 100%; object-fit: contain;">
@@ -1378,7 +1360,7 @@
         <p>Masukkan kredensial Anda untuk mengakses panel pengelolaan website KUA</p>
       </div>
       <div class="modal-body">
-        <form id="login-form" autocomplete="off">
+        <form id="login-form" autocomplete="off" onsubmit="return handleAdminLoginSubmit(event)">
           <div id="login-error" class="login-error" style="display:none;">
             <i class="fa-solid fa-circle-exclamation"></i>
             <span id="login-error-text">Username atau password salah. Silakan coba lagi.</span>
@@ -1386,7 +1368,7 @@
 
           <div class="login-info-box">
             <i class="fa-solid fa-circle-info"></i>
-            <div>Kredensial Default Administrator KUA Nanggung: Username <strong>kuananggung</strong> | Password <strong>admin67</strong></div>
+            <div>Kredensial Default: Username <strong>kuananggung</strong> &bull; Password <strong>admin67</strong></div>
           </div>
 
           <div class="form-group">
@@ -1414,13 +1396,150 @@
             <i class="fa-solid fa-right-to-bracket"></i> Masuk sebagai Admin
           </button>
 
-          <button type="button" class="btn btn-outline btn-block margin-top-sm" data-close-modal onclick="closeModal('modal-login')">
+          <button type="button" class="btn btn-outline btn-block margin-top-sm" data-close-modal onclick="closeLoginModal()">
             <i class="fa-solid fa-xmark"></i> Batal
           </button>
         </form>
       </div>
     </div>
   </div>
+
+  <script>
+    // --- INLINE SCRIPT MODAL LOGIN ADMIN ---
+    function openLoginModal() {
+      var modal = document.getElementById("modal-login");
+      if (modal) {
+        modal.classList.add("active");
+        modal.style.setProperty("display", "flex", "important");
+        modal.style.setProperty("visibility", "visible", "important");
+        modal.style.setProperty("opacity", "1", "important");
+        modal.style.setProperty("z-index", "999999", "important");
+        modal.style.setProperty("pointer-events", "auto", "important");
+        document.body.style.overflow = "hidden";
+
+        var dialog = modal.querySelector(".modal-dialog");
+        if (dialog) {
+          dialog.style.setProperty("display", "block", "important");
+          dialog.style.setProperty("visibility", "visible", "important");
+          dialog.style.setProperty("opacity", "1", "important");
+          dialog.style.setProperty("transform", "translateY(0)", "important");
+        }
+
+        var err = document.getElementById("login-error");
+        if (err) err.style.display = "none";
+
+        setTimeout(function() {
+          var u = document.getElementById("login-username");
+          if (u) { u.focus(); u.select(); }
+        }, 100);
+      } else {
+        var u = prompt("Username Administrator KUA:");
+        if (u !== null) {
+          var p = prompt("Password Administrator KUA:");
+          if (p !== null) {
+            handleDirectLogin(u, p);
+          }
+        }
+      }
+    }
+    window.openLoginModal = openLoginModal;
+
+    function closeLoginModal() {
+      var modal = document.getElementById("modal-login");
+      if (modal) {
+        modal.classList.remove("active");
+        modal.style.removeProperty("display");
+        modal.style.removeProperty("visibility");
+        modal.style.removeProperty("opacity");
+        modal.style.removeProperty("z-index");
+        modal.style.removeProperty("pointer-events");
+      }
+      document.body.style.overflow = "auto";
+    }
+    window.closeLoginModal = closeLoginModal;
+    window.closeModal = function(id) {
+      if (id === "modal-login") closeLoginModal();
+      else {
+        var m = document.getElementById(id);
+        if (m) { m.classList.remove("active"); document.body.style.overflow = "auto"; }
+      }
+    };
+
+    function handleAdminLoginSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      var uInput = document.getElementById("login-username");
+      var pInput = document.getElementById("login-password");
+      var u = (uInput ? uInput.value : "").trim().toLowerCase();
+      var p = (pInput ? pInput.value : "").trim();
+
+      handleDirectLogin(u, p);
+      return false;
+    }
+    window.handleAdminLoginSubmit = handleAdminLoginSubmit;
+
+    function handleDirectLogin(u, p) {
+      if (u === "kuananggung" && p === "admin67") {
+        try {
+          sessionStorage.setItem("kua_admin_session", "true");
+          localStorage.setItem("kua_admin_session", "true");
+        } catch (err) {}
+
+        if (window.state) {
+          window.state.isAdmin = true;
+        }
+
+        var errEl = document.getElementById("login-error");
+        if (errEl) errEl.style.display = "none";
+
+        closeLoginModal();
+
+        if (window.updateAdminUI) {
+          window.updateAdminUI();
+        } else {
+          var adminBar = document.getElementById("admin-bar");
+          if (adminBar) adminBar.style.display = "block";
+          var btnOpenLogin = document.getElementById("btn-open-login");
+          if (btnOpenLogin) btnOpenLogin.style.display = "none";
+          document.querySelectorAll(".admin-only").forEach(function(el) {
+            el.style.display = el.tagName === "BUTTON" ? "inline-block" : "flex";
+          });
+        }
+
+        if (typeof showToast === "function") {
+          showToast("Berhasil masuk sebagai Administrator KUA", "success");
+        } else {
+          alert("Berhasil masuk sebagai Administrator KUA!");
+        }
+      } else {
+        var errEl = document.getElementById("login-error");
+        if (errEl) {
+          errEl.style.display = "flex";
+          var txt = document.getElementById("login-error-text");
+          if (txt) txt.textContent = "Username atau password salah. Silakan coba lagi.";
+        } else {
+          alert("Username atau password salah!");
+        }
+      }
+    }
+    window.handleDirectLogin = handleDirectLogin;
+
+    // Buka otomatis jika ada parameter #admin, #login, ?admin, atau ?login di URL
+    window.addEventListener("DOMContentLoaded", function() {
+      if (window.location.hash === "#admin" || window.location.hash === "#login" ||
+          window.location.search.indexOf("admin") !== -1 || window.location.search.indexOf("login") !== -1) {
+        setTimeout(openLoginModal, 300);
+      }
+    });
+
+    // Shortcut Ctrl+Shift+L / Ctrl+Alt+A untuk buka modal login
+    window.addEventListener("keydown", function(e) {
+      if ((e.ctrlKey && e.shiftKey && (e.key === "L" || e.key === "l")) ||
+          (e.ctrlKey && e.altKey && (e.key === "A" || e.key === "a"))) {
+        e.preventDefault();
+        openLoginModal();
+      }
+    });
+  </script>
 
   <!-- Chatbot AI KUA Widget -->
   <div id="chatbot-widget">
@@ -1467,7 +1586,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=16"></script>
 </body>
 
 </html>
