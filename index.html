@@ -20,7 +20,7 @@
     crossorigin="anonymous">
 
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 
 <body>
@@ -42,6 +42,11 @@
           style="display:none; margin-left:1rem; font-size:0.8rem; font-weight:600; padding:2px 8px; border-radius:999px; background:rgba(0,0,0,0.2);"></span>
       </div>
       <div class="admin-bar-right">
+        <button id="btn-manage-hero-bar" class="btn btn-outline-white btn-sm" title="Kelola dan ubah kelima foto slide hero"
+          onclick="openManageHeroModal()"
+          style="margin-right: 0.5rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,0,0.1);">
+          <i class="fa-solid fa-images"></i> Kelola Foto Hero
+        </button>
         <button id="btn-manage-keahlian" class="btn btn-outline-white btn-sm" title="Kelola daftar master pilihan keahlian & spesialisasi"
           style="margin-right: 0.5rem; border: 1px solid rgba(255,255,255,0.4); color: white; background: rgba(0,0,0,0.1);">
           <i class="fa-solid fa-tags"></i> Kelola Pilihan Keahlian
@@ -186,10 +191,17 @@
 
       <div class="hero-visual">
         <div class="hero-image-card hero-slideshow" id="hero-slideshow">
-          <button class="btn btn-secondary btn-sm admin-only btn-edit-hero" style="display:none;"
-            onclick="promptEditHeroImg()">
-            <i class="fa-solid fa-camera"></i> Ubah Foto Hero
-          </button>
+          <!-- Admin Controls untuk Ubah Tiap Slide Hero -->
+          <div class="hero-admin-controls admin-only" style="display:none;">
+            <button class="btn btn-primary btn-sm btn-edit-hero-current"
+              onclick="promptEditCurrentSlide()" title="Ganti foto slide yang sedang aktif ini">
+              <i class="fa-solid fa-camera"></i> Ganti Slide (<span id="edit-slide-index-label">1</span>/5)
+            </button>
+            <button class="btn btn-secondary btn-sm btn-manage-all-hero"
+              onclick="openManageHeroModal()" title="Buka panel kelola kelima slide hero">
+              <i class="fa-solid fa-images"></i> Kelola 5 Slide
+            </button>
+          </div>
 
           <!-- Slide Track -->
           <div class="hero-slides-track">
@@ -1317,6 +1329,23 @@
         </form>
       </div>
     </div>
+  <!-- Modal Kelola Foto Slide Hero -->
+  <div id="modal-manage-hero" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <button class="modal-close" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-images highlight-green"></i> Kelola 5 Foto Slide Hero</h3>
+        <p>Anda dapat mengganti foto pada setiap slide (disarankan format landscape jernih / rasio 16:9).</p>
+      </div>
+      <div class="modal-body">
+        <div class="manage-hero-grid" id="manage-hero-grid">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" data-close-modal>Tutup</button>
+      </div>
+    </div>
   </div>
 
   <!-- Modal Login Admin -->
@@ -1416,7 +1445,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="app.js?v=12"></script>
+  <script src="app.js?v=13"></script>
 </body>
 
 </html>

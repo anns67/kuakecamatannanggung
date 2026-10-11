@@ -204,6 +204,15 @@ const DEFAULT_KUA_KEAHLIAN = [
   "Hisab & Rukyat / Falak"
 ];
 
+// --- DEFAULT 5 FOTO SLIDE HERO KUA ---
+const DEFAULT_HERO_SLIDES = [
+  "foto/kantor kua3.jpg",
+  "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1604594849809-dfedbc827105?auto=format&fit=crop&w=1200&q=80"
+];
+
 // --- INITIAL MOCK DATA KONSULTASI FORUM KUA ---
 const DEFAULT_KUA_KONSULTASI = [
   {
@@ -477,6 +486,9 @@ const D1_API = {
               const id = key.replace('foto_', '');
               avatarMap[id] = val;
             }
+            if (key.startsWith('hero_slide_') && val) {
+              avatarMap[key] = val;
+            }
           });
           // Tambahkan hero_img langsung ke map dengan key 'hero_img'
           if (json.data['hero_img']) {
@@ -498,7 +510,8 @@ class KuaState {
     this.activeRoleFilter = "all";
     this.searchQuery = "";
     this.isAdmin = false;
-    this.heroImgUrl = this.loadHeroImgFromStorage();
+    this.heroSlides = this.loadHeroSlidesFromStorage();
+    this.heroImgUrl = this.heroSlides[0] || this.loadHeroImgFromStorage();
     this.konsultasiList = this.loadKonsultasiFromStorage();
   }
 
@@ -622,18 +635,51 @@ class KuaState {
     }
   }
 
+  loadHeroSlidesFromStorage() {
+    const saved = localStorage.getItem("kua_hero_slides_v1");
+    if (saved) {
+      try {
+        const arr = JSON.parse(saved);
+        if (Array.isArray(arr) && arr.length === 5) return arr;
+      } catch (e) { }
+    }
+    const legacy = localStorage.getItem("kua_hero_img");
+    const slides = [...DEFAULT_HERO_SLIDES];
+    if (legacy) {
+      slides[0] = legacy;
+    }
+    return slides;
+  }
+
+  saveHeroSlide(index, url) {
+    if (index >= 0 && index < this.heroSlides.length) {
+      this.heroSlides[index] = url;
+      if (index === 0) {
+        this.heroImgUrl = url;
+        try { localStorage.setItem("kua_hero_img", url); } catch (e) { }
+        D1_API.saveSetting("hero_img", url);
+      }
+      try {
+        localStorage.setItem("kua_hero_slides_v1", JSON.stringify(this.heroSlides));
+      } catch (e) {
+        console.warn("[KUA] LocalStorage penuh:", e);
+      }
+      D1_API.saveSetting(`hero_slide_${index}`, url);
+    }
+  }
+
+  resetHeroSlide(index) {
+    if (index >= 0 && index < DEFAULT_HERO_SLIDES.length) {
+      this.saveHeroSlide(index, DEFAULT_HERO_SLIDES[index]);
+    }
+  }
+
   loadHeroImgFromStorage() {
-    return localStorage.getItem("kua_hero_img") || "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80";
+    return localStorage.getItem("kua_hero_img") || "foto/kantor kua3.jpg";
   }
 
   saveHeroImgToStorage(url) {
-    this.heroImgUrl = url;
-    try {
-      localStorage.setItem("kua_hero_img", url);
-    } catch (e) {
-      console.warn("[KUA] LocalStorage penuh:", e);
-    }
-    D1_API.saveSetting("hero_img", url);
+    this.saveHeroSlide(0, url);
   }
 
   loadPegawaiFromStorage() {
@@ -764,11 +810,18 @@ class KuaState {
       updateAdminInboxBadge();
     }
 
-    // 5. Ambil setting hero image dari D1 SQLite
-    const d1Hero = avatarMap['hero_img'] || await D1_API.getSetting("hero_img");
-    if (d1Hero) {
-      this.heroImgUrl = d1Hero;
-      try { localStorage.setItem("kua_hero_img", d1Hero); } catch (e) { }
+    // 5. Ambil setting hero image & 5 slide dari D1 SQLite
+    let slidesChanged = false;
+    for (let i = 0; i < 5; i++) {
+      const d1Slide = avatarMap[`hero_slide_${i}`] || (i === 0 ? (avatarMap['hero_img'] || await D1_API.getSetting("hero_img")) : await D1_API.getSetting(`hero_slide_${i}`));
+      if (d1Slide) {
+        this.heroSlides[i] = d1Slide;
+        if (i === 0) this.heroImgUrl = d1Slide;
+        slidesChanged = true;
+      }
+    }
+    if (slidesChanged) {
+      try { localStorage.setItem("kua_hero_slides_v1", JSON.stringify(this.heroSlides)); } catch (e) { }
       initHeroImg();
     }
 
@@ -1150,10 +1203,13 @@ function renderPegawaiGrid() {
 }
 
 function initHeroImg() {
-  const heroImg = document.getElementById("hero-main-img");
-  if (heroImg) {
-    heroImg.src = state.heroImgUrl;
-  }
+  const slides = document.querySelectorAll(".hero-slides-track .hero-slide");
+  slides.forEach((slide, idx) => {
+    const img = slide.querySelector("img");
+    if (img && state.heroSlides && state.heroSlides[idx]) {
+      img.src = state.heroSlides[idx];
+    }
+  });
   initHeroSlideshow();
 }
 
@@ -1188,6 +1244,10 @@ function initHeroSlideshow() {
     slides[index].classList.add("active");
     dots[index].classList.add("active");
     currentSlide = index;
+
+    window.currentHeroSlideIndex = index;
+    const label = document.getElementById("edit-slide-index-label");
+    if (label) label.textContent = index + 1;
 
     resetProgress();
   }
@@ -1288,9 +1348,60 @@ function initHeroSlideshow() {
 
 let currentEditAvatarId = null;
 let pendingAvatarBase64 = null; // Menyimpan sementara base64 foto yang dipilih dari file picker
+window.currentHeroSlideIndex = 0;
+window.currentUploadSlideIndex = 0;
 
-window.promptEditHeroImg = function () {
-  document.getElementById("upload-hero").click();
+window.promptEditHeroImg = function (idx) {
+  window.promptEditCurrentSlide(idx);
+};
+
+window.promptEditCurrentSlide = function (idx) {
+  if (typeof idx === 'number') {
+    window.currentUploadSlideIndex = idx;
+  } else {
+    window.currentUploadSlideIndex = window.currentHeroSlideIndex || 0;
+  }
+  const uploadHero = document.getElementById("upload-hero");
+  if (uploadHero) uploadHero.click();
+};
+
+window.openManageHeroModal = function () {
+  renderManageHeroModal();
+  openModal("modal-manage-hero");
+};
+
+function renderManageHeroModal() {
+  const container = document.getElementById("manage-hero-grid");
+  if (!container) return;
+
+  container.innerHTML = state.heroSlides.map((slideUrl, idx) => `
+    <div class="manage-hero-card">
+      <div class="manage-hero-header">
+        <span class="badge-slide"><i class="fa-solid fa-image"></i> Slide #${idx + 1}</span>
+        ${idx === (window.currentHeroSlideIndex || 0) ? '<span style="font-size:0.75rem; color:var(--kua-primary); font-weight:700;"><i class="fa-solid fa-play"></i> Sedang Aktif</span>' : ''}
+      </div>
+      <div class="manage-hero-preview">
+        <img src="${slideUrl}" alt="Preview Slide ${idx + 1}" onerror="this.src='foto/kantor kua3.jpg'">
+      </div>
+      <div class="manage-hero-actions">
+        <button class="btn btn-primary btn-sm btn-block" onclick="promptEditCurrentSlide(${idx})">
+          <i class="fa-solid fa-camera"></i> Ganti Foto Slide #${idx + 1}
+        </button>
+        <button class="btn btn-outline-danger btn-sm btn-block" onclick="resetHeroSlide(${idx})">
+          <i class="fa-solid fa-rotate-left"></i> Reset ke Foto Bawaan
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.resetHeroSlide = function (idx) {
+  if (confirm(`Kembalikan foto slide #${idx + 1} ke foto bawaan?`)) {
+    state.resetHeroSlide(idx);
+    initHeroImg();
+    renderManageHeroModal();
+    showToast(`Foto slide #${idx + 1} berhasil dikembalikan ke default!`, "info");
+  }
 };
 
 window.promptEditAvatar = function (id) {
@@ -1736,12 +1847,14 @@ function initEventListeners() {
     uploadHero.addEventListener("change", async (e) => {
       const file = e.target.files[0];
       if (file) {
-        showToast("Sedang memproses dan mengompres foto hero...", "info");
+        const targetIdx = typeof window.currentUploadSlideIndex === 'number' ? window.currentUploadSlideIndex : (window.currentHeroSlideIndex || 0);
+        showToast(`Sedang memproses dan mengompres foto slide #${targetIdx + 1}...`, "info");
         try {
-          const compressed = await compressImage(file, 1200, 675, 0.80);
-          state.saveHeroImgToStorage(compressed);
+          const compressed = await compressImage(file, 1200, 675, 0.82);
+          state.saveHeroSlide(targetIdx, compressed);
           initHeroImg();
-          showToast("Foto hero berhasil diperbarui!", "success");
+          renderManageHeroModal();
+          showToast(`Foto slide #${targetIdx + 1} berhasil diperbarui!`, "success");
         } catch (err) {
           showToast("Gagal memproses foto: " + err.message, "error");
         }
