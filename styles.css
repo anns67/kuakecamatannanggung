@@ -517,8 +517,13 @@ img {
 }
 
 /* Hero Visual Card & Slideshow */
+.hero-visual {
+  width: 100%;
+}
+
 .hero-image-card {
   position: relative;
+  width: 100%;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
@@ -526,6 +531,7 @@ img {
 }
 
 .hero-slideshow {
+  width: 100%;
   background: #000;
 }
 
@@ -2453,11 +2459,13 @@ img {
   }
 
   .hero-visual {
+    width: 100%;
     max-width: 600px;
     margin: 0 auto;
   }
 
   .hero-slides-track {
+    width: 100%;
     height: 380px;
   }
 
@@ -2587,9 +2595,9 @@ img {
     margin-bottom: 0.5rem;
   }
 
-  /* === HERO - ringkas, kurangi tinggi === */
+  /* === HERO - ringkas, jarak aman dari fixed navbar === */
   .hero-section {
-    padding: 5.5rem 0 2rem;
+    padding: 6.5rem 0 2rem;
   }
 
   .hero-title {
@@ -2641,29 +2649,36 @@ img {
     font-size: 0.85rem;
   }
 
-  .hero-image-card {
-    border-radius: var(--radius-md);
+  .hero-visual {
+    width: 100%;
+    max-width: 100%;
     margin-top: 1.25rem;
   }
 
+  .hero-image-card {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+
   .hero-slides-track {
-    height: 220px;
+    width: 100%;
+    height: 280px;
   }
 
   .hero-slide-arrow {
     width: 32px;
     height: 32px;
     font-size: 0.75rem;
-    opacity: 1;
+    opacity: 0.85;
   }
 
   .hero-slide-caption {
     font-size: 0.8rem;
-    padding: 0.7rem 1rem;
+    padding: 0.6rem 0.85rem;
   }
 
   .hero-slide-dots {
-    bottom: 3.2rem;
+    bottom: 2.7rem;
   }
 
   .hero-dot {
@@ -3178,7 +3193,28 @@ img {
   }
 
   .hero-section {
-    padding: 5rem 0 1.5rem;
+    padding: 6.25rem 0 1.75rem;
+  }
+
+  .hero-visual {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1rem;
+  }
+
+  .hero-image-card {
+    width: 100%;
+    border: 3px solid #ffffff;
+  }
+
+  .hero-slides-track {
+    width: 100%;
+    height: 240px;
+  }
+
+  .hero-slide-caption {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
   }
 
   .hero-title {
