@@ -855,6 +855,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initForum();
   initEventListeners();
   updateAdminInboxBadge();
+  initScrollReveal();
 
   // 2. Sinkronkan dengan Cloudflare D1 (SQLite) di server
   state.loadFromD1();
@@ -938,6 +939,64 @@ function initCounters() {
 
   const heroSection = document.querySelector(".hero-section");
   if (heroSection) observer.observe(heroSection);
+}
+
+// --- SCROLL REVEAL (EFEK MUNCUL SAAT MENGGULIR LAYAR) ---
+function initScrollReveal() {
+  const revealSelectors = [
+    ".section-header",
+    ".timeline-item",
+    ".layanan-card",
+    ".biaya-info-column",
+    ".biaya-calculator-column",
+    ".antrian-card",
+    ".syarat-tabs-wrapper",
+    ".pegawai-toolbar",
+    ".pegawai-card",
+    ".forum-stats-bar",
+    ".forum-main-grid",
+    ".kontak-grid",
+    ".footer-container",
+    ".reveal-on-scroll"
+  ];
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px 0px -40px 0px",
+    threshold: 0.08
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("revealed");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  function observeElements() {
+    const elements = document.querySelectorAll(revealSelectors.join(", "));
+    elements.forEach(el => {
+      if (!el.classList.contains("reveal-item")) {
+        el.classList.add("reveal-item");
+
+        // Stagger efek transisi berurutan untuk kartu layanan & pegawai
+        if (el.classList.contains("layanan-card") && el.parentElement) {
+          const idx = Array.from(el.parentElement.children).indexOf(el);
+          el.style.transitionDelay = `${(idx % 3) * 0.09}s`;
+        } else if (el.classList.contains("pegawai-card") && el.parentElement) {
+          const idx = Array.from(el.parentElement.children).indexOf(el);
+          el.style.transitionDelay = `${(idx % 4) * 0.07}s`;
+        }
+
+        revealObserver.observe(el);
+      }
+    });
+  }
+
+  observeElements();
+  window.refreshScrollReveal = observeElements;
 }
 
 // --- SIMULATOR BIAYA NIKAH CALCULATOR ---
@@ -1084,6 +1143,10 @@ function renderPegawaiGrid() {
       </div>
     `;
   }).join('');
+
+  if (window.refreshScrollReveal) {
+    window.refreshScrollReveal();
+  }
 }
 
 function initHeroImg() {
@@ -2596,9 +2659,9 @@ const KUA_KNOWLEDGE_BASE = [
     answer: `<b>💑 Jadwal Bimbingan Perkawinan (Bimwin) KUA Nanggung:</b><br><br>
     📅 <b>Jadwal Pelaksanaan:</b><br>
     Dilaksanakan <b>setiap hari Selasa dan Kamis</b>.<br><br>
-    ⏰ <b>Waktu:</b> 09.00 – 14.00 WIB<br>
+    ⏰ <b>Waktu:</b> 09.00 – 12.00 WIB<br>
     📍 <b>Tempat:</b> Gedung Balai Nikah KUA Kecamatan Nanggung<br>
-    ⏳ <b>Durasi:</b> 2 hari bimbingan tatap muka<br><br>
+    ⏳ <b>Durasi:</b> 2 hari bimbingan tatap muka (pukul 09.00 – 12.00 WIB)<br><br>
     📌 <i>Bimbingan Perkawinan (Suscatin) wajib diikuti oleh seluruh calon pengantin sebelum melangsungkan pernikahan untuk pembekalan keluarga sakinah dan sertifikat resmi.</i>`
   },
   {
@@ -2607,8 +2670,8 @@ const KUA_KNOWLEDGE_BASE = [
     📚 <b>Apa itu Bimwin/Suscatin?</b><br>
     Kursus calon pengantin yang wajib diikuti sebelum menikah untuk mempersiapkan kehidupan rumah tangga.<br><br>
     📅 <b>Jadwal Bimwin:</b><br>
-    • Dilaksanakan <b>setiap hari Selasa dan Kamis</b>, pukul 09.00 – 14.00 WIB<br>
-    • Durasi: 2 hari (total 16 jam pelajaran)<br><br>
+    • Dilaksanakan <b>setiap hari Selasa dan Kamis</b>, pukul 09.00 – 12.00 WIB<br>
+    • Durasi: 2 hari bimbingan<br><br>
     📋 <b>Materi:</b><br>
     • Hukum pernikahan Islam<br>
     • Membangun keluarga sakinah<br>

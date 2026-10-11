@@ -5152,3 +5152,66 @@ img {
     max-width: 1750px;
   }
 }
+
+/* ==========================================================================
+   SCROLL REVEAL ANIMATIONS (EFEK MUNCUL SAAT MENGGULIR LAYAR)
+   ========================================================================== */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Khusus header seksi: sedikit scaling halus */
+.section-header.reveal-item {
+  transform: translateY(28px) scale(0.98);
+}
+
+.section-header.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Timeline card animasi sedikit dari bawah */
+.timeline-item.reveal-item {
+  transform: translateY(30px);
+}
+
+.timeline-item.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Kolom kalkulator biaya: slide halus dari kiri dan kanan */
+.biaya-info-column.reveal-item {
+  transform: translateX(-35px);
+}
+
+.biaya-info-column.reveal-item.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.biaya-calculator-column.reveal-item {
+  transform: translateX(35px);
+}
+
+.biaya-calculator-column.reveal-item.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Aksesibilitas: Jangan animasikan jika pengguna mematikan animasi di OS */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
